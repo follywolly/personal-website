@@ -34,7 +34,7 @@ console.log('linked')
 
 
 ;(()=>{
-  fetch('https://api.folkertjan.nl/wp-json/wp/v2/posts')
+  fetch(`${config.personal.url}/wp-json/wp/v2/posts`)
     .then(res => res.json())
     .then(render)
 
