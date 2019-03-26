@@ -4,7 +4,7 @@
       <div class="container">
         <p>take a look inside the mind of</p>
         <h1 class="title">
-          Folkert-Jan van der Pol
+          Folkert-Jan <span>van der Pol</span>
         </h1>
         <p>a digital designer who loves to code</p>
       </div>
@@ -35,6 +35,9 @@ export default {
 
 <style lang="scss">
   .title {
-    margin: 0.5rem 0;
+    margin: 1rem 0;
+    span {
+      white-space: nowrap;
+    }
   }
 </style>

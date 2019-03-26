@@ -13,6 +13,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -52,6 +53,7 @@ export default {
     position: relative;
     padding: 0;
     z-index: 2;
+    cursor: pointer;
     &:active, &:focus {
       outline: none;
       &::after, &::before {
@@ -93,12 +95,39 @@ export default {
       padding: 0;
       li {
         font-size: 1.25rem;
-        font-weight: bold;
         text-align: center;
         padding: 2rem;
         a {
           text-decoration: none;
           color: var(--color-light);
+          font-family: var(--font-headings);
+          position: relative;
+          padding: 0;
+          width: 100%;
+          display: block;
+          max-width: 10rem;
+          margin: 0 auto;
+          z-index: 1;
+          &::after {
+            width: 0;
+            transform: skewX(15deg);
+            background-color: var(--color-semi-light);
+            height: 1rem;
+            position: absolute;
+            top: 1rem;
+            left: 0;
+            content: "";
+            display: block;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: -1;
+          }
+          &:hover {
+            &::after {
+              width: 100%;
+              opacity: 1;
+            }
+          }
         }
         span {
           font-weight: normal;
@@ -106,7 +135,7 @@ export default {
           font-size: 0.875rem;
           display: block;
           color: var(--color-semi-light);
-          margin-top: 0.25rem;
+          margin-top: 0.5rem;
           text-transform: lowercase;
         }
       }

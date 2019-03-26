@@ -15,6 +15,8 @@
   }
 </script>
 <style>
+@import url('https://fonts.googleapis.com/css?family=Cantata+One:400,400i,700');
+
 html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -38,6 +40,7 @@ html {
   --color-semi-light: #a3a3a3;
   --color-grey: #767676;
   --color-semi-dark: #353535;
+  --font-headings: 'Cantata One'
 }
 body {
   background-color: var(--color-dark);
@@ -47,8 +50,9 @@ main {
   padding-top: 5rem;
 }
 h1,h2,h3,h4,h5,h6 {
-  font-family: serif;
+  font-family: var(--font-headings), serif;
   color: var(--color-light);
+  font-weight: normal;
 }
 .container {
   margin: 0 auto;
