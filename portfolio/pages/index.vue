@@ -3,11 +3,11 @@
     <section>
       <div class="container">
         <ul class="work-holder">
-          <Card v-for="(project, i) in projects" :key="project.name" :index="i + 1" :project="project" />
+          <Card v-for="(project, i) in projects" :key="project.name" :index="i + 1" :total="projects.length" :project="project" />
         </ul>
       </div>
-      <div class="shadow">
-      </div>
+      <!-- <div class="shadow">
+      </div> -->
     </section>
   </main>
 
@@ -45,6 +45,24 @@ export default {
             src: 'https://unsplash.it/700/600'
           }
         },
+        {
+          title: 'katalysis.io',
+          img: {
+            src: 'https://unsplash.it/700/400'
+          }
+        },
+        {
+          title: 'jiskefet (cern)',
+          img: {
+            src: 'https://unsplash.it/800/400'
+          }
+        },
+        {
+          title: 'this is a really long project title',
+          img: {
+            src: 'https://unsplash.it/600/400'
+          }
+        },
 
       ]
     }, 10)
@@ -62,27 +80,28 @@ export default {
       white-space: nowrap;
     }
   }
-  .shadow {
-    &::before, &::after {
-      position: fixed;
-      z-index: 8;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 20vh;
-      content: "";
-      background: -moz-linear-gradient(top, rgba(19,19,19,0) 0%, rgba(19,19,19,1) 100%); /* FF3.6-15 */
-      background: -webkit-linear-gradient(top, rgba(19,19,19,0) 0%,rgba(19,19,19,1) 100%); /* Chrome10-25,Safari5.1-6 */
-      background: linear-gradient(to bottom, rgba(19,19,19,0) 0%,rgba(19,19,19,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#131313', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
-    }
-    &::before {
-      bottom: auto;
-      top: 0;
-      transform: rotate(180deg);
-    }
-
-  }
+  // .shadow {
+  //   pointer-events: none;
+  //   &::before, &::after {
+  //     position: fixed;
+  //     z-index: 8;
+  //     bottom: 0;
+  //     left: 0;
+  //     width: 100%;
+  //     height: 20vh;
+  //     content: "";
+  //     background: -moz-linear-gradient(top, rgba(19,19,19,0) 0%, rgba(19,19,19,1) 100%); /* FF3.6-15 */
+  //     background: -webkit-linear-gradient(top, rgba(19,19,19,0) 0%,rgba(19,19,19,1) 100%); /* Chrome10-25,Safari5.1-6 */
+  //     background: linear-gradient(to bottom, rgba(19,19,19,0) 0%,rgba(19,19,19,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  //     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#131313', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
+  //   }
+  //   &::before {
+  //     bottom: auto;
+  //     top: 0;
+  //     transform: rotate(180deg);
+  //   }
+  //
+  // }
   .work-holder {
     display: flex;
     flex-direction: column;

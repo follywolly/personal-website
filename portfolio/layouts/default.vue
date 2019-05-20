@@ -7,7 +7,12 @@
       <div class="page-t__item"></div>
       <div class="page-t__item"></div>
     </div>
+    <div id="cursor">
+    </div>
+    <div id="follower">
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -16,6 +21,47 @@
   export default {
     components: {
       Header
+    },
+    data() {
+      return {
+        mouse: {
+          x: 0,
+          y: 0
+        },
+        counter: 0
+      }
+
+    },
+    mounted() {
+      if (process.browser) {
+        const cursor = document.querySelector('#cursor')
+        const follower = document.querySelector('#follower')
+        window.addEventListener('mousemove', e => {
+          if (this.allowUpdate) {
+            this.x = e.clientX
+            this.y = e.clientY
+            cursor.style = `transform: translate(${this.x}px, ${this.y}px)`;
+            follower.style = `transform: translate(${this.x}px, ${this.y}px)`;
+          }
+        })
+        const links = [...document.querySelectorAll('a')]
+        const buttons = [...document.querySelectorAll('button')]
+        const hoverables = links.concat(buttons)
+        hoverables.forEach(hoverable => {
+          hoverable.addEventListener('mouseenter', () => {
+            cursor.classList.add('hover')
+          })
+          hoverable.addEventListener('mouseleave', () => {
+            cursor.classList.remove('hover')
+          })
+        })
+      }
+    },
+    computed: {
+      allowUpdate() {
+        const refreshRate = 1
+        return this.counter++ % refreshRate === 0
+      }
     }
   }
 </script>
@@ -31,6 +77,41 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
 }
+#cursor, #follower {
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+  border: 2px solid var(--color-light);
+  content: "";
+  position: fixed;
+  top: -3px;
+  left: -3px;
+  background: var(--color-light);
+  transition: all 1s, transform 0s;
+  pointer-events: none;
+  z-index: 12;
+  &.hover {
+    width: 30px;
+    height: 30px;
+    top: -15px;
+    left: -15px;
+    background: transparent;
+    + #follower {
+      transition: transform 0s;
+    }
+  }
+}
+#follower {
+  border-width: 1px;
+  width: 30px;
+  height: 30px;
+  opacity: .5;
+  top: -15px;
+  left: -15px;
+  transition: opacity 1s, background 1s, transform .1s;
+  background: transparent;
+  z-index: 11;
+}
 
 *,
 *:before,
@@ -44,27 +125,34 @@ html {
   --color-semi-light: #a3a3a3;
   --color-grey: #767676;
   --color-semi-dark: #353535;
-  --font-headings: 'cortado';
-  --font-main: 'cortado'
+  --font-headings: 'brandon-grotesque', sans-serif;
+  --font-card-headings: 'cortado', serif;
+  --font-main: 'brandon-grotesque', sans-serif;
 }
 body {
   background-color: var(--color-dark);
   color: var(--color-semi-light);
+  font-family: var(--font-main);
+  font-weight: normal;
+  cursor: none;
 }
 main {
   padding-top: 5rem;
   transition: opacity 1s;
 }
 h1,h2,h3,h4,h5,h6 {
-  font-family: var(--font-headings), serif;
+  font-family: var(--font-headings);
   color: var(--color-light);
-  font-weight: normal;
+  font-weight: 900;
 }
 .container {
   margin: 0 auto;
   padding: 3rem 1.5rem;
   max-width: 1080px;
   min-height: 50vh;
+}
+a {
+  cursor: none;
 }
 p {
   text-transform: lowercase;

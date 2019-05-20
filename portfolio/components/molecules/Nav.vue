@@ -53,7 +53,7 @@ export default {
     position: relative;
     padding: 0;
     z-index: 2;
-    cursor: pointer;
+    cursor: none;
     &:active, &:focus {
       outline: none;
       &::after, &::before {
@@ -101,6 +101,7 @@ export default {
           text-decoration: none;
           color: var(--color-light);
           font-family: var(--font-headings);
+          font-weight: 900;
           position: relative;
           padding: 0;
           width: 100%;
@@ -142,8 +143,8 @@ export default {
     }
   }
   .nav-open {
-    max-height: 100vh;
-    overflow: hidden;
+    // max-height: 100vh;
+    // overflow: hidden;
     nav {
       transform: translateX(-100vw);
     }

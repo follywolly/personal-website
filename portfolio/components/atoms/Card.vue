@@ -1,6 +1,6 @@
 <template>
   <div class="card" ref="card">
-    <nuxt-link :to="`/projects/${project.name}`">
+    <nuxt-link :to="`/projects/${project.title}`" class="card__link">
       <div class="card__image-holder" ref="image">
         <figure class="card__image">
           <img :src="project.img.src" alt="">
@@ -24,46 +24,74 @@
 </template>
 <script>
 export default {
-  props: ['project', 'index'],
+  props: ['project', 'index', 'total'],
   data() {
     return {
       coords: {
         x: 0,
         y: 0,
-      }
+      },
+      mouse: {
+        _x: 0,
+        _y: 0,
+        x: 0,
+        y: 0,
+        cursor: null
+      },
+      counter: 0
     }
   },
   mounted() {
-    this.$refs.card.addEventListener('mousemove', this.moveCard)
-    this.$refs.card.addEventListener('mouseout', this.resetCard)
+    if (process.browser) {
+      this.cursor = document.querySelector('#cursor')
+      this.$refs.card.addEventListener('mouseenter', e => {
+        this.cursor.classList.add('hover')
+        this.update(e)
+      })
+      this.$refs.card.addEventListener('mousemove', e => {
+        if (this.allowUpdate) {
+          this.update(e)
+        }
+      })
+      this.$refs.card.addEventListener('mouseout', () => {
+        this.cursor.classList.remove('hover')
+        this.reset()
+      })
+      this.setOrigin(this.$refs.card)
+    }
+
   },
   computed: {
     modIndex() {
-      return this.index < 9 ? '0' + this.index : this.index
+      return this.total > 9 ? `0${this.index} / ${this.total}` : `${this.index} / ${this.total}`
+    },
+    allowUpdate() {
+      const refreshRate = 10
+      return this.counter++ % refreshRate === 0
     }
   },
   methods: {
-    resetCard() {
-      this.$refs.image.style = `transform: rotateX(0) rotateY(0deg); transition: transform 1s`
-
+    updatePosition(event) {
+      const e = event || window.event
+      const rect = e.target.getBoundingClientRect()
+      this.mouse.x = (e.clientX - rect.left) - this.mouse._x
+      this.mouse.y = ((e.clientY - rect.top) - this.mouse._y) * -1
     },
-    moveCard(e) {
-      const rect = e.target.getBoundingClientRect();
-      const x = e.clientX - rect.left; //x position within the element.
-      const y = (e.clientY - rect.top) * -1;
-      this.coords = {x, y}
-
-      const degs = this.calcRange(x, y, rect, [-5, 5])
-
-      this.$refs.image.style = `transform: rotateX(${degs.x}deg) rotateY(${degs.y}deg);`
-
+    setOrigin(e) {
+      this.mouse._x = Math.floor(e.offsetWidth / 2)
+      this.mouse._y = Math.floor(e.offsetHeight / 2)
+      console.log(this.mouse._x, this.mouse._y);
     },
-    calcRange(x, y, rect, minmax) {
-      const [min, max] = minmax
-      const range = Math.abs(min - max)
-      const position = {x: x / rect.width * range, y: y / rect.height * range}
-      const degs = {x: (min + position.x).toFixed(2), y: (min + position.y).toFixed(2)}
-      return degs
+    reset() {
+      this.$refs.image.style = `transform: rotateX(0deg) rotateY(0deg); transition: transform 1s`
+    },
+    update(event) {
+      this.updatePosition(event)
+
+      const x = (this.mouse.y / this.$refs.image.offsetHeight / 2).toFixed(2)
+      const y = (this.mouse.x / this.$refs.image.offsetWidth / 2).toFixed(2)
+
+      this.$refs.image.style = `transform: rotateX(${x * 20}deg) rotateY(${y * 20}deg);`
     }
   }
 }
@@ -73,11 +101,17 @@ export default {
 .card {
   position: relative;
   width: 100%;
-  max-width: 30rem;
+  max-width: 40rem;
   min-height: 15rem;
   margin-bottom: 10rem;
-  cursor: pointer;
   perspective: 1000px;
+  &__link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+  }
   &__button {
     position: absolute;
     bottom: 0;
@@ -86,6 +120,7 @@ export default {
     padding-left: 3rem;
     opacity: 0;
     transition: opacity .25s, transform .25s;
+    pointer-events: none;
     &::before {
       position: absolute;
       left: 0;
@@ -100,19 +135,19 @@ export default {
   &__image {
     opacity: .5;
     width: 100%;
-    max-height: 15rem;
+    height: 15rem;
     overflow: hidden;
     transition: opacity .5s;
+    background-color: var(--color-semi-dark);
     img {
       object-fit: cover;
       width: 100%;
       height: 100%;
-      pointer-events: none;
       transition: transform .5s;
     }
     &-holder {
+      pointer-events: none;
       transition: transform 0;
-
       transform-style: preserve-3d;
       position: absolute;
       left: 10rem;
@@ -121,12 +156,7 @@ export default {
       width: 100%;
       max-width: 30rem;
       box-shadow: 2px 2px 50px rgba(100, 100, 100, 0.2);
-      &:hover {
-        img {
-          transform: scale(1.25);
-          transition: transform 10s ease-out;
-        }
-      }
+
     }
   }
   &__title {
@@ -139,7 +169,7 @@ export default {
       left: 0;
       transition: opacity .5s, transform .5s;
       .title {
-        font-family: var(--font-main), sans-serif;
+        font-family: var(--font-card-headings), sans-serif;
         font-weight: 400;
         font-style: normal;
         font-size: 4rem;
@@ -165,6 +195,10 @@ export default {
   &:hover {
     .card__image {
       opacity: 1;
+      img {
+        transform: scale(1.25);
+        transition: transform 10s ease-out;
+      }
     }
     .card__button {
       opacity: 1;

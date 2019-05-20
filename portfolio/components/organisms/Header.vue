@@ -30,7 +30,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   header {
     position: fixed;
     top: 0;
@@ -44,7 +44,9 @@ export default {
       padding: 1rem 1.5rem;
       display: flex;
       justify-content: space-between;
-      pointer-events: all;
+      > * {
+        pointer-events: all;
+      }
     }
     .bottom {
       position: absolute;
