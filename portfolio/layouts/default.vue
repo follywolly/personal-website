@@ -2,11 +2,16 @@
   <div>
     <Header />
     <nuxt />
+    <div class="page-t">
+      <div class="page-t__item"></div>
+      <div class="page-t__item"></div>
+      <div class="page-t__item"></div>
+    </div>
   </div>
 </template>
 
 <script>
-  import Header from '~/components/header/Header.vue'
+  import Header from '~/components/organisms/Header.vue'
 
   export default {
     components: {
@@ -14,8 +19,7 @@
     }
   }
 </script>
-<style>
-@import url('https://fonts.googleapis.com/css?family=Cantata+One:400,400i,700');
+<style lang="scss">
 
 html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -40,7 +44,8 @@ html {
   --color-semi-light: #a3a3a3;
   --color-grey: #767676;
   --color-semi-dark: #353535;
-  --font-headings: 'Cantata One'
+  --font-headings: 'cortado';
+  --font-main: 'cortado'
 }
 body {
   background-color: var(--color-dark);
@@ -48,6 +53,7 @@ body {
 }
 main {
   padding-top: 5rem;
+  transition: opacity 1s;
 }
 h1,h2,h3,h4,h5,h6 {
   font-family: var(--font-headings), serif;
@@ -64,5 +70,30 @@ p {
   text-transform: lowercase;
   font-size: 0.875rem;
   font-weight: lighter;
+}
+.page-t {
+  position: fixed;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  .page-t__item {
+    background-color: #131313;
+    width: 200vw;
+    content: "";
+    display: block;
+    transform: translateX(-200vw);
+    flex: 1;
+  }
+}
+.page-enter-active, .page-leave-active {
+  transition: opacity 1s;
+}
+.page-enter, .page-leave-active {
+  opacity: 0;
 }
 </style>
