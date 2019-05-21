@@ -33,6 +33,10 @@ export default {
     }
   },
   mounted() {
+    if (!process.browser) {
+      return
+    }
+    
     const getCursorXY = e => {
       const eye = document.querySelector('#eye')
 
@@ -46,7 +50,7 @@ export default {
     if (window.Event) {
       document.captureEvents(Event.MOUSEMOVE);
     }
-    document.onmousemove = getCursorXY;
+    document.addEventListener('mousemove', getCursorXY)
   }
 }
 </script>
@@ -60,9 +64,9 @@ export default {
   border: 2px solid white;
   border-radius: 5px 80%;
   position: relative;
-  transform: rotate(-45deg) scale(.75);
+  transform: rotate(-45deg) scale(.5);
   overflow: hidden;
-  margin-top: -.5rem;
+  margin-top: -.75rem;
   z-index: 4;
 
   &__holder {
@@ -73,12 +77,12 @@ export default {
   }
   &__lashes, &__lashes::after, &__lashes::before {
     content: "";
-    width: 2px;
-    height: .5rem;
+    width: 1px;
+    height: .3rem;
     position: relative;
     background-color: white;
     display: block;
-    border-radius: 25px;
+    border-radius: 0;
     z-index: 4;
   }
   &__lashes::before, &__lashes::after {

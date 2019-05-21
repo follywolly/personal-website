@@ -1,7 +1,9 @@
 <template>
   <div>
     <Header />
-    <nuxt />
+    <main>
+      <nuxt/>
+    </main>
     <div class="page-t">
       <div class="page-t__item"></div>
       <div class="page-t__item"></div>
@@ -17,6 +19,8 @@
 
 <script>
   import Header from '~/components/organisms/Header.vue'
+  import helpers from '~/components/modules/helpers.js'
+  import config from '~/components/modules/config.js'
 
   export default {
     components: {
@@ -26,41 +30,94 @@
       return {
         mouse: {
           x: 0,
-          y: 0
+          y: 0,
+          allowed: false
         },
-        counter: 0
+        counter: 0,
+        cursor: null,
+        follower: null,
+        hoverables: []
       }
 
     },
     mounted() {
+      this.cursor = document.querySelector('#cursor')
+      this.follower = document.querySelector('#follower')
+
+      this.checkIfCursorAllowed()
+
       if (process.browser) {
-        const cursor = document.querySelector('#cursor')
-        const follower = document.querySelector('#follower')
-        window.addEventListener('mousemove', e => {
-          if (this.allowUpdate) {
-            this.x = e.clientX
-            this.y = e.clientY
-            cursor.style = `transform: translate(${this.x}px, ${this.y}px)`;
-            follower.style = `transform: translate(${this.x}px, ${this.y}px)`;
-          }
-        })
-        const links = [...document.querySelectorAll('a')]
-        const buttons = [...document.querySelectorAll('button')]
-        const hoverables = links.concat(buttons)
-        hoverables.forEach(hoverable => {
-          hoverable.addEventListener('mouseenter', () => {
-            cursor.classList.add('hover')
+        fetch(config.api.url + 'posts')
+          .then(res => res.json())
+          .then(posts => {
+            const projects = posts.map(post => post.acf)
+            this.$store.commit('setProjects', projects)
           })
-          hoverable.addEventListener('mouseleave', () => {
-            cursor.classList.remove('hover')
-          })
-        })
+      }
+    },
+    watch: {
+      $route(to, from) {
+        this.resetCursor()
+        this.checkIfCursorAllowed()
       }
     },
     computed: {
       allowUpdate() {
         const refreshRate = 1
         return this.counter++ % refreshRate === 0
+      }
+    },
+    methods: {
+      checkIfCursorAllowed() {
+        if (process.browser && helpers.getWindowSize().width > 1024 && !this.mouse.allowed) {
+
+          this.initCursor()
+        }
+        if (process.browser && helpers.getWindowSize().width < 1024 && this.mouse.allowed) {
+
+          this.resetCursor()
+        }
+        window.addEventListener('resize', this.checkIfCursorAllowed)
+      },
+      resetCursor() {
+        this.mouse.allowed = false
+        this.cursor.classList.remove('hover')
+        window.removeEventListener('mouseout', this.onMouseOut)
+        window.removeEventListener('mousemove', this.onMouseMove)
+        this.hoverables.forEach(hoverable => {
+          hoverable.removeEventListener('mouseenter', this.onHoverableMouseEnter)
+          hoverable.removeEventListener('mouseleave', this.onHoverableMouseLeave)
+        })
+      },
+      initCursor() {
+        this.mouse.allowed = true
+        const links = [...document.querySelectorAll('a')]
+        const buttons = [...document.querySelectorAll('button')]
+        this.hoverables = links.concat(buttons)
+        window.addEventListener('mouseout', this.onMouseOut)
+        window.addEventListener('mousemove', this.onMouseMove)
+        this.hoverables.forEach(hoverable => {
+          hoverable.addEventListener('mouseenter', this.onHoverableMouseEnter)
+          hoverable.addEventListener('mouseleave', this.onHoverableMouseLeave)
+        })
+      },
+      onMouseMove(e) {
+        if (this.allowUpdate) {
+          this.x = e.clientX
+          this.y = e.clientY
+          this.cursor.style = `transform: translate(${this.x}px, ${this.y}px);`;
+          this.follower.style = `transform: translate(${this.x}px, ${this.y}px);`;
+        }
+      },
+      onMouseOut() {
+        this.cursor.style.opacity = 0
+        this.follower.style.opacity = 0
+      },
+      onHoverableMouseEnter() {
+        this.cursor.classList.add('hover')
+      },
+      onHoverableMouseLeave() {
+        this.cursor.classList.remove('hover')
       }
     }
   }
@@ -78,6 +135,7 @@ html {
   box-sizing: border-box;
 }
 #cursor, #follower {
+  display: none;
   border-radius: 50%;
   width: 5px;
   height: 5px;
@@ -90,6 +148,9 @@ html {
   transition: all 1s, transform 0s;
   pointer-events: none;
   z-index: 12;
+  @media screen and (min-width: 60rem) {
+    display: block;
+  }
   &.hover {
     width: 30px;
     height: 30px;
@@ -126,7 +187,7 @@ html {
   --color-grey: #767676;
   --color-semi-dark: #353535;
   --font-headings: 'brandon-grotesque', sans-serif;
-  --font-card-headings: 'cortado', serif;
+  --font-decorative: 'cortado', serif;
   --font-main: 'brandon-grotesque', sans-serif;
 }
 body {
@@ -138,7 +199,7 @@ body {
 }
 main {
   padding-top: 5rem;
-  transition: opacity 1s;
+  transition: opacity .75s;
 }
 h1,h2,h3,h4,h5,h6 {
   font-family: var(--font-headings);
@@ -149,14 +210,22 @@ h1,h2,h3,h4,h5,h6 {
   margin: 0 auto;
   padding: 3rem 1.5rem;
   max-width: 1080px;
-  min-height: 50vh;
 }
 a {
   cursor: none;
+  color: inherit;
+  text-decoration: none;
+  transition: color .3s;
+  // &:visited {
+  //   color: inherit;
+  // }
+  &:hover {
+    color: white;
+  }
 }
 p {
   text-transform: lowercase;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: lighter;
 }
 .page-t {
@@ -179,7 +248,7 @@ p {
   }
 }
 .page-enter-active, .page-leave-active {
-  transition: opacity 1s;
+  transition: opacity .75s;
 }
 .page-enter, .page-leave-active {
   opacity: 0;

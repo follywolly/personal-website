@@ -8,12 +8,3 @@
 <script>
 
 </script>
-<style lang="scss">
-a {
-  color: white;
-  text-decoration: none;
-  &:visited {
-    color: white;
-  }
-}
-</style>

@@ -1,71 +1,51 @@
 <template>
-  <main>
-    <section>
+  <div class="home">
+    <section id="projects">
       <div class="container">
         <ul class="work-holder">
           <Card v-for="(project, i) in projects" :key="project.name" :index="i + 1" :total="projects.length" :project="project" />
         </ul>
       </div>
-      <!-- <div class="shadow">
-      </div> -->
     </section>
-  </main>
+    <section id="contact">
+      <div class="container">
+        <h2>Contact</h2>
+      </div>
+    </section>
+  </div>
 
 </template>
 
 <script>
 import Card from '~/components/atoms/Card.vue'
+import { TweenLite } from 'gsap'
+import observer from '~/components/modules/observer.js'
 export default {
   components: {
     Card,
   },
-  data() {
-    return {
-      projects: []
+  computed: {
+    projects() {
+      return this.$store.getters.getProjects()
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.projects = [
-        {
-          title: 'katalysis.io',
-          img: {
-            src: 'https://unsplash.it/800/600'
-          }
-        },
-        {
-          title: 'jiskefet (cern)',
-          img: {
-            src: 'https://unsplash.it/900/600'
-          }
-        },
-        {
-          title: 'rainforest alliance',
-          img: {
-            src: 'https://unsplash.it/700/600'
-          }
-        },
-        {
-          title: 'katalysis.io',
-          img: {
-            src: 'https://unsplash.it/700/400'
-          }
-        },
-        {
-          title: 'jiskefet (cern)',
-          img: {
-            src: 'https://unsplash.it/800/400'
-          }
-        },
-        {
-          title: 'this is a really long project title',
-          img: {
-            src: 'https://unsplash.it/600/400'
-          }
-        },
+    if (!process.browser || !observer.exists) {
+      return
+    }
 
-      ]
-    }, 10)
+    const cards = document.querySelectorAll('.card')
+    const cardIntersector = observer.generate(this.fadeIn, .25)
+
+    cards.forEach(card => {
+      card.classList.add('observable')
+      cardIntersector.observe(card)
+    })
+  },
+  methods: {
+    fadeIn(entry) {
+      TweenLite.to(entry.target, 1, {delay: .3, y: -64, opacity: 1})
+    }
   }
 }
 </script>
@@ -80,28 +60,6 @@ export default {
       white-space: nowrap;
     }
   }
-  // .shadow {
-  //   pointer-events: none;
-  //   &::before, &::after {
-  //     position: fixed;
-  //     z-index: 8;
-  //     bottom: 0;
-  //     left: 0;
-  //     width: 100%;
-  //     height: 20vh;
-  //     content: "";
-  //     background: -moz-linear-gradient(top, rgba(19,19,19,0) 0%, rgba(19,19,19,1) 100%); /* FF3.6-15 */
-  //     background: -webkit-linear-gradient(top, rgba(19,19,19,0) 0%,rgba(19,19,19,1) 100%); /* Chrome10-25,Safari5.1-6 */
-  //     background: linear-gradient(to bottom, rgba(19,19,19,0) 0%,rgba(19,19,19,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  //     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#131313', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
-  //   }
-  //   &::before {
-  //     bottom: auto;
-  //     top: 0;
-  //     transform: rotate(180deg);
-  //   }
-  //
-  // }
   .work-holder {
     display: flex;
     flex-direction: column;
@@ -109,5 +67,12 @@ export default {
     list-style: none;
     padding: 8rem 0;
     margin: 0;
+    .card {
+      &.observable {
+        position: relative;
+        top: 4rem;
+        opacity: 0;
+      }
+    }
   }
 </style>

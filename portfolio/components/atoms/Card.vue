@@ -1,12 +1,12 @@
 <template>
   <div class="card" ref="card">
-    <nuxt-link :to="`/projects/${project.title}`" class="card__link">
+    <nuxt-link :to="`/projects/${slug}`" class="card__link">
       <div class="card__image-holder" ref="image">
         <figure class="card__image">
-          <img :src="project.img.src" alt="">
+          <img :src="project.image" alt="">
         </figure>
       </div>
-      <div class="card__title">
+      <div class="card__title" ref="title">
         <div class="card__title-outline">
           <h3 class="title">{{project.title}}</h3>
         </div>
@@ -16,13 +16,15 @@
       </div>
       {{modIndex}}
       <div class="card__button">
-        check out
+        read more
       </div>
 
     </nuxt-link>
   </div>
 </template>
 <script>
+import { TweenLite } from 'gsap'
+import helpers from '~/components/modules/helpers.js'
 export default {
   props: ['project', 'index', 'total'],
   data() {
@@ -36,28 +38,16 @@ export default {
         _y: 0,
         x: 0,
         y: 0,
-        cursor: null
+        cursor: null,
+        allowed: false
       },
       counter: 0
     }
   },
   mounted() {
     if (process.browser) {
-      this.cursor = document.querySelector('#cursor')
-      this.$refs.card.addEventListener('mouseenter', e => {
-        this.cursor.classList.add('hover')
-        this.update(e)
-      })
-      this.$refs.card.addEventListener('mousemove', e => {
-        if (this.allowUpdate) {
-          this.update(e)
-        }
-      })
-      this.$refs.card.addEventListener('mouseout', () => {
-        this.cursor.classList.remove('hover')
-        this.reset()
-      })
-      this.setOrigin(this.$refs.card)
+      this.mouse.cursor = document.querySelector('#cursor')
+      this.checkIfHoverAllowed()
     }
 
   },
@@ -68,9 +58,37 @@ export default {
     allowUpdate() {
       const refreshRate = 10
       return this.counter++ % refreshRate === 0
+    },
+    slug() {
+      const sanitized = this.project.title.replace(/[^A-Za-z0-9\s]/g,'').toLowerCase()
+      return sanitized.split(' ').join('-')
     }
   },
   methods: {
+    checkIfHoverAllowed() {
+      if (process.browser && helpers.getWindowSize().width > 1024 && !this.mouse.allowed) {
+        this.initHover()
+      }
+      if (process.browser && helpers.getWindowSize().width < 1024 && this.mouse.allowed) {
+        this.resetHover()
+      }
+      window.addEventListener('resize', this.checkIfHoverAllowed)
+    },
+    initHover() {
+      this.mouse.allowed = true
+      const card = this.$refs.card
+      card.addEventListener('mousemove', this.update)
+      card.addEventListener('mouseout', this.reset)
+      this.setOrigin(card)
+    },
+    resetHover() {
+      this.mouse.allowed = false
+      const card = this.$refs.card
+      if (card) {
+        card.removeEventListener('mousemove', this.update)
+        card.removeEventListener('mouseout', this.reset)
+      }
+    },
     updatePosition(event) {
       const e = event || window.event
       const rect = e.target.getBoundingClientRect()
@@ -80,18 +98,23 @@ export default {
     setOrigin(e) {
       this.mouse._x = Math.floor(e.offsetWidth / 2)
       this.mouse._y = Math.floor(e.offsetHeight / 2)
-      console.log(this.mouse._x, this.mouse._y);
     },
     reset() {
+      this.mouse.cursor.classList.remove('hover')
       this.$refs.image.style = `transform: rotateX(0deg) rotateY(0deg); transition: transform 1s`
     },
     update(event) {
+      if (!this.allowUpdate) return
+
+      if (!this.mouse.cursor.classList.contains('hover')) {
+        this.mouse.cursor.classList.add('hover')
+      }
       this.updatePosition(event)
 
       const x = (this.mouse.y / this.$refs.image.offsetHeight / 2).toFixed(2)
       const y = (this.mouse.x / this.$refs.image.offsetWidth / 2).toFixed(2)
 
-      this.$refs.image.style = `transform: rotateX(${x * 20}deg) rotateY(${y * 20}deg);`
+      this.$refs.image.style = `transform: rotateX(${x * 30}deg) rotateY(${y * 30}deg);`
     }
   }
 }
@@ -169,7 +192,7 @@ export default {
       left: 0;
       transition: opacity .5s, transform .5s;
       .title {
-        font-family: var(--font-card-headings), sans-serif;
+        font-family: var(--font-decorative);
         font-weight: 400;
         font-style: normal;
         font-size: 4rem;
