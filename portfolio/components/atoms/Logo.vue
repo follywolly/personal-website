@@ -14,10 +14,11 @@
   </div>
 </template>
 <script>
+import { TweenLite } from 'gsap'
 export default {
   data() {
     return {
-      rot: 0
+      rot: 90
     }
   },
   methods: {
@@ -36,7 +37,8 @@ export default {
     if (!process.browser) {
       return
     }
-    
+    const eye = document.querySelector('#eye')
+
     const getCursorXY = e => {
       const eye = document.querySelector('#eye')
 
@@ -68,7 +70,7 @@ export default {
   overflow: hidden;
   margin-top: -.75rem;
   z-index: 4;
-
+  // transition: transform 1s, width 1s, height 1s, margin 1s;
   &__holder {
     display: flex;
     flex-direction: column;

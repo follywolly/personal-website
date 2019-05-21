@@ -3,10 +3,9 @@
     <button @click="toggleNav" class="nav__button">Open navigation</button>
     <nav>
       <ul>
-        <li><nuxt-link @click.native="toggleNav" to="/" data-text="Home">Home <span aria-hidden="true">where the heart is</span></nuxt-link></li>
-        <li><nuxt-link @click.native="toggleNav" to="/#projects" data-text="Projects">Projects <span aria-hidden="true">stuff i made</span></nuxt-link></li>
-        <li><nuxt-link @click.native="toggleNav" to="/#experiences" data-text="Experience">Experiences <span aria-hidden="true">collection of memories</span></nuxt-link></li>
-        <li><nuxt-link @click.native="toggleNav" to="/#contact" data-text="Contact">Contact <span aria-hidden="true">get in touch</span></nuxt-link></li>
+        <li><nuxt-link @click.native="onClick" to="/" data-text="Home">Home <span aria-hidden="true">where the heart is</span></nuxt-link></li>
+        <li><nuxt-link @click.native="onClick" to="/#projects" data-text="Projects">Projects <span aria-hidden="true">stuff i made</span></nuxt-link></li>
+        <li><nuxt-link @click.native="onClick" to="/#contact" data-text="Contact">Contact <span aria-hidden="true">get in touch</span></nuxt-link></li>
       </ul>
     </nav>
   </div>
@@ -18,18 +17,47 @@ import { TweenLite } from 'gsap'
 export default {
   data() {
     return {
-      nav: false,
+      id: null
     }
   },
   mounted() {
     this.body = document.querySelector('body'),
     this.links = document.querySelectorAll('header nav li')
   },
+  watch: {
+    $route() {
+      if(this.$route.hash) {
+        setTimeout(() => {
+          if (!this.id) {
+            return
+          }
+          const el = document.querySelector(this.id)
+          TweenLite.to(window, 1.2, { scrollTo: el })
+
+          this.id = null
+        }, 1000)
+      }
+    }
+  },
   methods: {
+    onClick(e) {
+      const hash = this.$route.hash
+      if (!hash) {
+        return this.toggleNav()
+      }
+      this.id = hash
+      const el = document.querySelector(this.id)
+      if (!el) {
+        return this.toggleNav() // route watcher takes over
+      }
+      this.id = null
+      this.toggleNav()
+      TweenLite.to(window, 1.2, { scrollTo: el, delay: .5 })
+    },
     toggleNav() {
       const links = this.links
       const length = links.length
-      if (this.nav) {
+      if (this.body.classList.contains('nav-open')) {
         links.forEach((link, i) => {
           TweenLite.to(links[length - 1 - i], 0.15, {delay: 0.05 * i, y: 32, opacity: 0, onComplete: () => {
             if (i === length - 1) {
@@ -43,7 +71,6 @@ export default {
           TweenLite.to(link, .4, {delay: 0.2 * (i + 1), y: -32, opacity: 1})
         })
       }
-      this.nav = !this.nav
     }
   }
 }

@@ -44,7 +44,7 @@ export default {
       justify-content: space-between;
     }
     .top {
-      a, button {
+      a, button, nav {
         pointer-events: all;
       }
       .shadow {
@@ -70,10 +70,8 @@ export default {
       left: 0;
       font-size: .875rem;
       color: white;
+      transition: color .3s, opacity .3s;
       opacity: 0;
-      > * {
-        transition: color .3s, opacity .3s;
-      }
       @media screen and (min-width: 60rem) {
         color: var(--color-grey);
         opacity: 1;

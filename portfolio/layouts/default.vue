@@ -2,7 +2,7 @@
   <div>
     <Header />
     <main>
-      <nuxt/>
+      <nuxt class="page"/>
     </main>
     <div class="page-t">
       <div class="page-t__item"></div>
@@ -46,19 +46,21 @@
 
       this.checkIfCursorAllowed()
 
-      if (process.browser) {
-        fetch(config.api.url + 'posts')
-          .then(res => res.json())
-          .then(posts => {
-            const projects = posts.map(post => post.acf)
-            this.$store.commit('setProjects', projects)
-          })
-      }
+      // if (process.browser) {
+      //   fetch(config.api.url + 'posts')
+      //     .then(res => res.json())
+      //     .then(posts => {
+      //       const projects = posts.map(post => post.acf)
+      //       this.$store.commit('setProjects', projects)
+      //     })
+      // }
     },
     watch: {
       $route(to, from) {
-        this.resetCursor()
-        this.checkIfCursorAllowed()
+        setTimeout(() => {
+          this.resetCursor()
+          this.checkIfCursorAllowed()
+        }, 1000)
       }
     },
     computed: {
@@ -80,6 +82,7 @@
         window.addEventListener('resize', this.checkIfCursorAllowed)
       },
       resetCursor() {
+        console.log('resetting mouse');
         this.mouse.allowed = false
         this.cursor.classList.remove('hover')
         window.removeEventListener('mouseout', this.onMouseOut)
@@ -93,7 +96,8 @@
         this.mouse.allowed = true
         const links = [...document.querySelectorAll('a')]
         const buttons = [...document.querySelectorAll('button')]
-        this.hoverables = links.concat(buttons)
+        const lights = [...document.querySelectorAll('.mouse-dark')]
+        this.hoverables = links.concat(buttons).concat(lights)
         window.addEventListener('mouseout', this.onMouseOut)
         window.addEventListener('mousemove', this.onMouseMove)
         this.hoverables.forEach(hoverable => {
@@ -113,11 +117,19 @@
         this.cursor.style.opacity = 0
         this.follower.style.opacity = 0
       },
-      onHoverableMouseEnter() {
-        this.cursor.classList.add('hover')
+      onHoverableMouseEnter(e) {
+        if (e.target.classList.contains('mouse-dark')) {
+          this.cursor.classList.add('dark')
+        } else {
+          this.cursor.classList.add('hover')
+        }
       },
-      onHoverableMouseLeave() {
-        this.cursor.classList.remove('hover')
+      onHoverableMouseLeave(e) {
+        if (e.target.classList.contains('mouse-dark')) {
+          this.cursor.classList.remove('dark')
+        } else {
+          this.cursor.classList.remove('hover')
+        }
       }
     }
   }
@@ -159,6 +171,13 @@ html {
     background: transparent;
     + #follower {
       transition: transform 0s;
+    }
+  }
+  &.dark {
+    border-color: var(--color-dark);
+    background: var(--color-dark);
+    &+ #follower {
+      border-color: var(--color-dark);
     }
   }
 }

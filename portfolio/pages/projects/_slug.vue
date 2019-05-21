@@ -5,9 +5,8 @@
         <h2 class="project__title" ref="title">
           {{ project.title }}
         </h2>
-        <p class="project__description" ref="description">
-          {{ project.description }}
-        </p>
+        <div class="project__description" ref="description" v-html="project.description">
+        </div>
       </div>
     </section>
     <div class="project-banner">
@@ -18,13 +17,13 @@
     <section class="project__section project__summary">
       <div class="container">
         <h3 class="project__section-title">Summary</h3>
-        <div v-html="project.summary_content">
+        <div v-html="project.summary.content">
 
         </div>
       </div>
-      <div class="project__section-image">
+      <div class="project__section-image" :class="project.summary.class ? project.summary.class : ''">
         <figure class="project__img-holder project__img-holder--section">
-          <img :src="project.summary_image" alt="" class="project__img project__img--section">
+          <img :src="project.summary.image" alt="" class="project__img project__img--section">
         </figure>
       </div>
     </section>
@@ -130,19 +129,18 @@ export default {
       width: 100%;
       height: 100%;
       background-color: var(--color-semi-dark);
+      vertical-align: top;
       &--banner {
         position: absolute;
         left: 100vw;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 0;
       }
       &--section {
         &.observable {
           opacity: 0;
           position: absolute;
           left: 80vw;
-          top: 50%;
-          transform: translateY(-50%);
+          top: 0;
         }
       }
     }
