@@ -9,7 +9,19 @@
         </div>
       </div>
     </section>
-    <div class="project-banner">
+    <div class="project__meta" v-if="project.meta">
+      <div class="container">
+        <ul class="project__meta-list" ref="meta">
+          <li v-for="[key, value] in Object.entries(project.meta)" :key="key" class="project__meta-list-item">
+            <h3 class="project__meta-text">
+              <span class="project__meta-text-part project__meta-text-part--key">{{key}}</span>
+              <span class="project__meta-text-part project__meta-text-part--value">{{value}}</span>
+            </h3>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="project__banner">
       <figure class="project__img-holder project__img-holder--banner">
         <img :src="project.image" ref="banner" alt="" class="project__img project__img--banner">
       </figure>
@@ -23,7 +35,7 @@
       </div>
       <div class="project__section-image" :class="project.summary.class ? project.summary.class : ''">
         <figure class="project__img-holder project__img-holder--section">
-          <img :src="project.summary.image" alt="" class="project__img project__img--section">
+          <img :data-src="project.summary.image" alt="" class="project__img project__img--section">
         </figure>
       </div>
     </section>
@@ -47,9 +59,13 @@ export default {
       const img = this.$refs.banner
       const title = this.$refs.title
       const description = this.$refs.description
-      TweenLite.to(img, 1, {x: "-100vw"})
-      TweenLite.to(title, 1, {opacity: 1, y: -10, delay: .5})
-      TweenLite.to(description, 1, {opacity: 1, y: -10, delay: 1})
+      const meta = this.$refs.meta
+      TweenLite.to(img, 1, {x: '-10vw'})
+      TweenLite.to(title, 1, {opacity: 1, y: -16, delay: .75})
+      TweenLite.to(description, 1, {opacity: 1, y: -16, delay: 1.25})
+      if (meta) {
+        TweenLite.to(meta, 1, {opacity: 1, y: -16, delay: 1.75})
+      }
 
       if (observer.exists) {
         const titles = document.querySelectorAll('.project__section-title')
@@ -81,7 +97,8 @@ export default {
       TweenLite.to(entry.target, 1, {delay: .5, x: 32, opacity: 1})
     },
     slideInRight(entry) {
-      TweenLite.to(entry.target, 1, {x: '-80vw', opacity: 1, delay: .5})
+      if (!entry.target.src) entry.target.src = entry.target.dataset.src
+      TweenLite.to(entry.target, 1, {x: '-10vw', opacity: 1, delay: .5})
     },
     fadeIn(entry) {
       TweenLite.to(entry.target, 1, {delay: .5, y: -32, opacity: 1})
@@ -91,6 +108,7 @@ export default {
 </script>
 <style lang="scss">
   .project {
+    // position: relative;
     p {
       max-width: 30rem;
       margin: 1rem 0;
@@ -104,24 +122,30 @@ export default {
       margin-bottom: .5em;
       opacity: 0;
       position: relative;
-      top: 10px;
+      top: 1rem;
     }
     &__description {
       opacity: 0;
       position: relative;
-      top: 10px;
+      top: 1rem;
     }
     &__img-holder {
       overflow: hidden;
       display: block;
-      width: 100%;
+      width: 100vw;
       position: relative;
+
       &--banner {
         height: 50vh;
+        @media screen and (min-width: 40rem) {
+          width: 90vw;
+          left: 10vw;
+        }
       }
       &--section {
         min-height: 10rem;
         height: 80vh;
+
       }
     }
     &__img {
@@ -130,17 +154,63 @@ export default {
       height: 100%;
       background-color: var(--color-semi-dark);
       vertical-align: top;
-      &--banner {
-        position: absolute;
-        left: 100vw;
-        top: 0;
-      }
+      position: absolute;
+      left: 10vw;
+      top: 0;
       &--section {
         &.observable {
           opacity: 0;
-          position: absolute;
-          left: 80vw;
-          top: 0;
+        }
+      }
+    }
+    &__meta {
+      position: relative;
+      @media screen and (min-width: 40rem) {
+        transform: translateY(50%);
+        z-index: 2;
+      }
+      .container {
+        padding: 0;
+        @media screen and (min-width: 40rem) {
+          padding: 0 1.5rem;
+        }
+      }
+      &-list {
+        position: relative;
+        top: 1rem;
+        opacity: 0;
+        list-style: none;
+        padding: 0;
+        display: inline-flex;
+        justify-content: space-around;
+        padding: 1rem 0;
+        background-color: var(--color-semi-dark);
+        width: 100%;
+        @media screen and (min-width: 40rem) {
+          padding: 1rem 2rem;
+          width: auto;
+        }
+        &-item {
+          margin: 0 .5rem;
+          @media screen and (min-width: 40rem) {
+            margin: 0 1rem;
+          }
+        }
+      }
+      &-text {
+        font-family: var(--font-main);
+        &-part {
+          display: block;
+          text-align: center;
+          &--key {
+            font-weight: 300;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--color-semi-light);
+          }
+          &--value {
+            font-weight: 600;
+          }
         }
       }
     }

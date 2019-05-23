@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" :class="showSplash ? 'restrained' : ''">
     <section id="projects">
       <div class="container">
         <ul class="work-holder">
@@ -12,21 +12,28 @@
         <h2>Contact</h2>
       </div>
     </section>
+    <SplashScreen v-if="showSplash" />
+    {{showSplash}}
   </div>
 
 </template>
 
 <script>
 import Card from '~/components/atoms/Card.vue'
+import SplashScreen from '~/components/organisms/SplashScreen.vue'
 import { TweenLite } from 'gsap'
 import observer from '~/components/modules/observer.js'
 export default {
   components: {
     Card,
+    SplashScreen
   },
   computed: {
     projects() {
       return this.$store.getters.getProjects()
+    },
+    showSplash() {
+      return this.$store.getters.getSplashScreen
     }
   },
   mounted() {
@@ -44,6 +51,18 @@ export default {
   },
   methods: {
     fadeIn(entry) {
+      // window.addEventListener('scroll', (e) => {
+      //   const top = entry.target.getBoundingClientRect().top
+      //   const perc = 1 - top / window.innerHeight
+      //   if (top > 0) {
+      //     TweenLite.to(entry.target, .1, {z: -100 + 100 * perc})
+      //   }
+      //   if (top > window.innerHeight / 2) {
+      //     TweenLite.to(entry.target, .1, {z: 0 - 100 * perc})
+      //   }
+      // })
+      const img = entry.target.querySelector('.card__image--inner')
+      if (!img.src) img.src = img.dataset.src
       TweenLite.to(entry.target, 1, {delay: .3, y: -64, opacity: 1})
     }
   }
@@ -51,7 +70,15 @@ export default {
 </script>
 
 <style lang="scss">
+  .home {
+    padding-top: 6rem;
+    &.restrained {
+      max-height: 100vh;
+      overflow-y: hidden;
+    }
+  }
   main {
+    padding-top: 0;
     overflow-x: hidden;
   }
   .title {
@@ -67,6 +94,7 @@ export default {
     list-style: none;
     padding: 8rem 0;
     margin: 0;
+    // perspective: 1000px;
     .card {
       &.observable {
         position: relative;

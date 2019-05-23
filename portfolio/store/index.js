@@ -7,6 +7,11 @@ export const state = () => ({
       summary: {
         content: '<p>Katalysis is a start-up company based in Amsterdam. Katalysis was founded by Alex Tran Qui and Eveline Klumpers. Alex and Eveline bring together a broad set of disciplines and backgrounds: tech, ﬁnance and entrepreneurship.</p><p>Katalysis develops software based on smart contract blockchain technology aimed to help the publishing industry with the transition from off- to online. Katalysis’ product, Katalysis DecPub (Katalysis Decentralized Publishing), is the first blockchain based implementation used in the publishing industry in the Netherlands.</p>',
         image: '/images/maat-creative/screenshot_1.png',
+      },
+      meta: {
+        client: 'MAAT. Creative',
+        role: 'Developer & Designer',
+        date: '21/02/2019'
       }
     },
     {
@@ -16,6 +21,11 @@ export const state = () => ({
       summary: {
         content: '<p>Katalysis is a start-up company based in Amsterdam. Katalysis was founded by Alex Tran Qui and Eveline Klumpers. Alex and Eveline bring together a broad set of disciplines and backgrounds: tech, ﬁnance and entrepreneurship.</p><p>Katalysis develops software based on smart contract blockchain technology aimed to help the publishing industry with the transition from off- to online. Katalysis’ product, Katalysis DecPub (Katalysis Decentralized Publishing), is the first blockchain based implementation used in the publishing industry in the Netherlands.</p>',
         image: '/images/rainforest-alliance/screenshot_2.png',
+      },
+      meta: {
+        client: 'Rainforest Alliance',
+        role: 'Developer & Designer',
+        date: '21/02/2019'
       }
     },
     {
@@ -26,6 +36,11 @@ export const state = () => ({
         content: '<p>Katalysis is a start-up company based in Amsterdam. Katalysis was founded by Alex Tran Qui and Eveline Klumpers. Alex and Eveline bring together a broad set of disciplines and backgrounds: tech, ﬁnance and entrepreneurship.</p><p>Katalysis develops software based on smart contract blockchain technology aimed to help the publishing industry with the transition from off- to online. Katalysis’ product, Katalysis DecPub (Katalysis Decentralized Publishing), is the first blockchain based implementation used in the publishing industry in the Netherlands.</p>',
         image: '/images/jiskefet/design_screenshot_3.png',
         class: 'mouse-dark'
+      },
+      meta: {
+        client: 'UASA ICT',
+        role: 'Developer & Designer',
+        date: '21/02/2019'
       }
     },
     {
@@ -36,19 +51,23 @@ export const state = () => ({
         content: '<p>Katalysis is a start-up company based in Amsterdam. Katalysis was founded by Alex Tran Qui and Eveline Klumpers. Alex and Eveline bring together a broad set of disciplines and backgrounds: tech, ﬁnance and entrepreneurship.</p><p>Katalysis develops software based on smart contract blockchain technology aimed to help the publishing industry with the transition from off- to online. Katalysis’ product, Katalysis DecPub (Katalysis Decentralized Publishing), is the first blockchain based implementation used in the publishing industry in the Netherlands.</p>',
         image: '/images/katalysis/screenshot_2.png',
         class: 'mouse-dark'
+      },
+      meta: {
+        client: 'Katalysis',
+        role: 'Developer',
+        date: '21/02/2019'
       }
     }
-  ]
+  ],
+  splashScreen: true
 })
 
 export const mutations = {
-  mouseMove (state, {x, y}) {
-    state.mouse.x = x
-    state.mouse.y = y
-    console.log('updated store');
-  },
   setProjects(state, payload) {
     state.projects = payload
+  },
+  setSplashScreen(state, payload) {
+    state.splashScreen = payload
   }
 }
 
@@ -63,5 +82,8 @@ export const getters = {
         return sanitized.split(' ').join('-') === slug
       })
     }
+  },
+  getSplashScreen(state) {
+    return state.splashScreen
   }
 }

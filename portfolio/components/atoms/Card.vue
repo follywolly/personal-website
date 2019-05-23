@@ -3,7 +3,7 @@
     <nuxt-link :to="`/projects/${slug}`" class="card__link">
       <div class="card__image-holder" ref="image">
         <figure class="card__image">
-          <img :src="project.image" alt="">
+          <img class="card__image--inner" :data-src="project.image" alt="">
         </figure>
       </div>
       <div class="card__title" ref="title">
@@ -29,10 +29,6 @@ export default {
   props: ['project', 'index', 'total'],
   data() {
     return {
-      coords: {
-        x: 0,
-        y: 0,
-      },
       mouse: {
         _x: 0,
         _y: 0,
@@ -77,6 +73,7 @@ export default {
     initHover() {
       this.mouse.allowed = true
       const card = this.$refs.card
+      if (!card) return
       card.addEventListener('mousemove', this.update)
       card.addEventListener('mouseout', this.reset)
       this.setOrigin(card)
@@ -128,6 +125,11 @@ export default {
   min-height: 15rem;
   margin-bottom: 10rem;
   perspective: 1000px;
+  &:hover {
+    .card__image {
+      transform: scale(1.15);
+    }
+  }
   &__link {
     position: absolute;
     top: 0;
@@ -160,7 +162,7 @@ export default {
     width: 100%;
     height: 15rem;
     overflow: hidden;
-    transition: opacity .5s;
+    transition: opacity .5s, transform .75s cubic-bezier(0.165, 0.84, 0.44, 1);
     background-color: var(--color-semi-dark);
     img {
       object-fit: cover;

@@ -72,6 +72,7 @@ export default {
       color: white;
       transition: color .3s, opacity .3s;
       opacity: 0;
+      padding: 1.5rem;
       @media screen and (min-width: 60rem) {
         color: var(--color-grey);
         opacity: 1;

@@ -82,9 +82,9 @@
         window.addEventListener('resize', this.checkIfCursorAllowed)
       },
       resetCursor() {
-        console.log('resetting mouse');
         this.mouse.allowed = false
         this.cursor.classList.remove('hover')
+        this.cursor.classList.remove('dark')
         window.removeEventListener('mouseout', this.onMouseOut)
         window.removeEventListener('mousemove', this.onMouseMove)
         this.hoverables.forEach(hoverable => {
@@ -109,13 +109,24 @@
         if (this.allowUpdate) {
           this.x = e.clientX
           this.y = e.clientY
-          this.cursor.style = `transform: translate(${this.x}px, ${this.y}px);`;
-          this.follower.style = `transform: translate(${this.x}px, ${this.y}px);`;
+          if (this.cursor.classList.contains('hover')) {
+            TweenLite.to(this.cursor, 0, {x: this.x, y: this.y, opacity: 1})
+            TweenLite.to(this.cursor, .3, {rotation: 45})
+            TweenLite.to(this.follower, .1, {x: this.x, y: this.y, opacity: .5})
+            TweenLite.to(this.follower, .3, {rotation: -225})
+
+          } else {
+            TweenLite.to(this.cursor, 0, {x: this.x, y: this.y, opacity: 1})
+            TweenLite.to(this.cursor, .3, {rotation: 0})
+            TweenLite.to(this.follower, .1, {x: this.x, y: this.y, opacity: .5})
+            TweenLite.to(this.follower, .3, {rotation: 0})
+          }
+
         }
       },
       onMouseOut() {
-        this.cursor.style.opacity = 0
-        this.follower.style.opacity = 0
+        TweenLite.to(this.cursor, .3, {opacity: 0})
+        TweenLite.to(this.follower, .5, {opacity: 0})
       },
       onHoverableMouseEnter(e) {
         if (e.target.classList.contains('mouse-dark')) {
@@ -149,28 +160,37 @@ html {
 #cursor, #follower {
   display: none;
   border-radius: 50%;
-  width: 5px;
-  height: 5px;
-  border: 2px solid var(--color-light);
+  width: 6px;
+  height: 6px;
+  border: 1px solid white; /*var(--color-light)*/
   content: "";
   position: fixed;
   top: -3px;
   left: -3px;
-  background: var(--color-light);
-  transition: all 1s, transform 0s;
+  background: white; /*var(--color-light);*/
+  transition: all .6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0s;
   pointer-events: none;
   z-index: 12;
+  opacity: 0;
+  // mix-blend-mode: difference;
   @media screen and (min-width: 60rem) {
     display: block;
   }
   &.hover {
-    width: 30px;
-    height: 30px;
-    top: -15px;
-    left: -15px;
-    background: transparent;
+    width: 12px;
+    height: 12px;
+    border-radius: 0;
+    top: -6px;
+    left: -6px;
+    background: rgba(255,255,255,.4);
     + #follower {
-      transition: transform 0s;
+      border-radius: 0;
+      width: 30px;
+      height: 30px;
+      top: -15px;
+      left: -15px;
+      background-color: rgba(255,255,255,.1);
+      // background-color: white;
     }
   }
   &.dark {
@@ -183,12 +203,11 @@ html {
 }
 #follower {
   border-width: 1px;
-  width: 30px;
-  height: 30px;
-  opacity: .5;
-  top: -15px;
-  left: -15px;
-  transition: opacity 1s, background 1s, transform .1s;
+  width: 24px;
+  height: 24px;
+  top: -12px;
+  left: -12px;
+  transition: transform .1s, all .3s;
   background: transparent;
   z-index: 11;
 }
