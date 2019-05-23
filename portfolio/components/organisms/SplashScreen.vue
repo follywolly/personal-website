@@ -5,7 +5,7 @@
         <img src="images/eye.png" alt="">
       </div>
       <h2 class="intro__title">
-        <span class="intro__title-part">Folkert</span><span class="intro__title-part">-Jan</span>
+        <div class="intro__title-fg"><span class="intro__title-part">Folkert</span><span class="intro__title-part">-Jan</span></div>
         <div class="intro__title-bg" aria-hidden><span class="intro__title-part intro__title-part--bg">Folkert</span><span class="intro__title-part intro__title-part--bg">-Jan</span></div>
       </h2>
       <p ref="text" class="intro__sub">Portfolio of a designer who loves to code</p>
@@ -16,7 +16,7 @@
       </div>
     </div>
     <div ref="button" class="intro__link mouse-dark">
-      <button @click="toggleSplashScreen">ENTER</button>
+      <button @click="toggleSplashScreen">enter</button>
     </div>
   </div>
 
@@ -72,12 +72,21 @@ export default {
     toggleSplashScreen() {
       this.mouse.cursor.classList.remove('hover')
       this.mouse.cursor.classList.remove('dark')
+      if (!this.$refs.holder) {
+        return
+      }
       TweenLite.to(this.$refs.holder, 1, {opacity: 0, onComplete: () => {
         this.$store.commit('setSplashScreen', false)
       }})
     },
     initLoader() {
       const loader = this.$refs.loader
+      if (!loader) {
+        setTimeout(() => {
+          this.toggleSplashScreen()
+        }, 9000)
+        return
+      }
       TweenLite.to(loader, 9, {width: '100%', ease: Linear.easeNone, delay: 1, onComplete: () => {
         this.toggleSplashScreen()
       }})
@@ -184,7 +193,6 @@ export default {
         white-space: nowrap;
         color: transparent;
         -webkit-text-stroke: 1px white;
-        z-index: 4;
         opacity: 0;
         &:first-of-type {
           top: 45vh;
@@ -203,8 +211,20 @@ export default {
         }
         &--bg {
           color: white;
-          z-index: 2;
         }
+      }
+      &-fg, &-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        bottom: 0;
+      }
+      &-bg {
+        z-index: 2;
+      }
+      &-fg {
+        z-index: 4;
       }
     }
     &__image {
@@ -238,8 +258,10 @@ export default {
         border: 1px solid white;
         background: white;
         color: var(--color-dark);
-        padding: .5rem 2.5rem;
+        padding: .3rem 3rem;
         transition: all .3s;
+        font-size: 1.25rem;
+        font-family: var(--font-main);
         &:hover {
           transform: scale(1.125);
         }
@@ -247,11 +269,17 @@ export default {
 
     }
     &__loader {
-      width: 100%;
+      width: 100vh;
       height: .25rem;
       position: absolute;
       left: 0;
       bottom: 0;
+      transform-origin: top left;
+      transform: rotate(-90deg);
+      @media screen and (min-width: 40rem) {
+        width: 100vw;
+        transform: rotate(0);
+      }
       &-inner {
         display: block;
         background-color: var(--color-grey);

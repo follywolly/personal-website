@@ -1,6 +1,6 @@
 <template>
   <div class="logo">
-    <nuxt-link to="/">
+    <nuxt-link @click.native="$store.commit('setSplashScreen', true)" to="/">
       <div class="eye__holder">
         <div class="eye__lashes">
         </div>

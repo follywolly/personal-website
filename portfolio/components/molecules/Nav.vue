@@ -3,7 +3,7 @@
     <button @click="toggleNav" class="nav__button">Open navigation</button>
     <nav>
       <ul>
-        <li><nuxt-link @click.native="onClick" to="/" data-text="Home">Home <span aria-hidden="true">where the heart is</span></nuxt-link></li>
+        <li><nuxt-link @click.native="() => {$store.commit('setSplashScreen', true); onClick()}" to="/" data-text="Home">Home <span aria-hidden="true">where the heart is</span></nuxt-link></li>
         <li><nuxt-link @click.native="onClick" to="/#projects" data-text="Projects">Projects <span aria-hidden="true">stuff i made</span></nuxt-link></li>
         <li><nuxt-link @click.native="onClick" to="/#contact" data-text="Contact">Contact <span aria-hidden="true">get in touch</span></nuxt-link></li>
       </ul>

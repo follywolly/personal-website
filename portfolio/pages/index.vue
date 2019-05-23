@@ -28,21 +28,31 @@ export default {
     SplashScreen
   },
   computed: {
-    projects() {
-      return this.$store.getters.getProjects()
-    },
     showSplash() {
       return this.$store.getters.getSplashScreen
+    },
+    projects() {
+      return this.$store.getters.getProjects()
     }
   },
   mounted() {
-    if (!process.browser || !observer.exists) {
+    if (!process.browser && !observer.exists) {
       return
     }
+    if (process.browser && !observer.exists) {
+      const cards = document.querySelectorAll('.card')
+      cards.forEach(card => {
+        const img = card.querySelector('.card__image--inner')
+        img.src = img.dataset.src
+      })
+    }
 
-    const cards = document.querySelectorAll('.card')
     const cardIntersector = observer.generate(this.fadeIn, .25)
+    const cards = document.querySelectorAll('.card')
 
+    if (!cards.length || cards.length === 0) {
+      return
+    }
     cards.forEach(card => {
       card.classList.add('observable')
       cardIntersector.observe(card)
@@ -93,6 +103,7 @@ export default {
     list-style: none;
     padding: 8rem 0;
     margin: 0;
+    min-height: 100vh;
     // perspective: 1000px;
     .card {
       &.observable {
