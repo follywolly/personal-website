@@ -13,7 +13,6 @@
       </div>
     </section>
     <SplashScreen v-if="showSplash" />
-    {{showSplash}}
   </div>
 
 </template>
@@ -71,7 +70,7 @@ export default {
 
 <style lang="scss">
   .home {
-    padding-top: 6rem;
+    padding-top: 5rem;
     &.restrained {
       max-height: 100vh;
       overflow-y: hidden;

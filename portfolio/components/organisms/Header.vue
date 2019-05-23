@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header ref="header">
     <div class="top">
       <Logo />
       <Nav />
@@ -19,11 +19,15 @@
 import Logo from '~/components/atoms/Logo.vue'
 import Nav from '~/components/molecules/Nav.vue'
 import Socials from '~/components/atoms/Socials.vue'
+import { TweenLite } from 'gsap'
 export default {
   components: {
     Logo,
     Nav,
     Socials
+  },
+  mounted() {
+    TweenLite.to(this.$refs.header, 1, {opacity: 1, delay: 4})
   }
 }
 </script>
@@ -37,6 +41,7 @@ export default {
     bottom: 0;
     pointer-events: none;
     z-index: 10;
+    opacity: 0;
     .top, .bottom {
       width: 100%;
       padding: 1rem 1.5rem;

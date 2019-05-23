@@ -56,6 +56,8 @@ export default {
   },
   mounted() {
     if (process.browser) {
+      this.$store.commit('setSplashScreen', false)
+      
       const img = this.$refs.banner
       const title = this.$refs.title
       const description = this.$refs.description
@@ -109,6 +111,7 @@ export default {
 <style lang="scss">
   .project {
     // position: relative;
+    padding-top: 5rem;
     p {
       max-width: 30rem;
       margin: 1rem 0;

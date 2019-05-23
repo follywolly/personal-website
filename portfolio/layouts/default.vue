@@ -236,7 +236,6 @@ body {
   cursor: none;
 }
 main {
-  padding-top: 5rem;
   transition: opacity .75s;
 }
 h1,h2,h3,h4,h5,h6 {
@@ -260,6 +259,9 @@ a {
   &:hover {
     color: white;
   }
+}
+button {
+  cursor: none;
 }
 p {
   text-transform: lowercase;

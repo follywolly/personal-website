@@ -2,7 +2,7 @@
   <div class="intro-holder" ref="holder">
     <div class="intro" ref="card">
       <div class="intro__image" ref="image">
-        <img src="images/eye.jpg" alt="">
+        <img src="images/eye.png" alt="">
       </div>
       <h2 class="intro__title">
         <span class="intro__title-part">Folkert</span><span class="intro__title-part">-Jan</span>
@@ -10,7 +10,10 @@
       </h2>
       <p ref="text" class="intro__sub">Portfolio of a designer who loves to code</p>
 
-
+      <div class="intro__loader">
+        <div class="intro__loader-inner" ref="loader">
+        </div>
+      </div>
     </div>
     <div ref="button" class="intro__link mouse-dark">
       <button @click="toggleSplashScreen">ENTER</button>
@@ -60,8 +63,10 @@ export default {
     TweenLite.to(textBgs[0], 1, {x: '10vw', opacity: 1, delay: 1})
     TweenLite.to(textTops[1], 1, {x: '-10vw', opacity: 1, delay: 1.5})
     TweenLite.to(textBgs[1], 1, {x: '-10vw', opacity: 1, delay: 1.5})
-    TweenLite.to(text, 1, {x: '10vw', opacity: 1, delay: 2})
-    TweenLite.to(button, 1, {y: '-10vh', opacity: 1, delay: 3.5})
+    TweenLite.to(text, 1, {x: '10vw', opacity: 1, delay: 3})
+    TweenLite.to(button, 1, {y: '-10vh', opacity: 1, delay: 4.5, onComplete: () => {
+      this.initLoader()
+    }})
   },
   methods: {
     toggleSplashScreen() {
@@ -69,6 +74,12 @@ export default {
       this.mouse.cursor.classList.remove('dark')
       TweenLite.to(this.$refs.holder, 1, {opacity: 0, onComplete: () => {
         this.$store.commit('setSplashScreen', false)
+      }})
+    },
+    initLoader() {
+      const loader = this.$refs.loader
+      TweenLite.to(loader, 9, {width: '100%', ease: Linear.easeNone, delay: 1, onComplete: () => {
+        this.toggleSplashScreen()
       }})
     },
     checkIfHoverAllowed() {
@@ -230,10 +241,24 @@ export default {
         padding: .5rem 2.5rem;
         transition: all .3s;
         &:hover {
-          background: rgba(255,255,255,.5);
+          transform: scale(1.125);
         }
       }
 
+    }
+    &__loader {
+      width: 100%;
+      height: .25rem;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      &-inner {
+        display: block;
+        background-color: var(--color-grey);
+        content: "";
+        height: .25rem;
+        width: 0;
+      }
     }
 
   }
