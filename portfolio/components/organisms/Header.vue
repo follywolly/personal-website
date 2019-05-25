@@ -74,6 +74,7 @@ export default {
       bottom: 0;
       left: 0;
       font-size: .875rem;
+      font-size: 1rem;
       color: white;
       transition: color .3s, opacity .3s;
       opacity: 0;
@@ -94,7 +95,7 @@ export default {
       a {
         pointer-events: all;
         &:hover {
-          color: var(--color-semi-dark);
+          color: var(--color-semi-light);
         }
       }
     }

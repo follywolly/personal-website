@@ -72,11 +72,9 @@
     methods: {
       checkIfCursorAllowed() {
         if (process.browser && helpers.getWindowSize().width > 1024 && !this.mouse.allowed) {
-
           this.initCursor()
         }
         if (process.browser && helpers.getWindowSize().width < 1024 && this.mouse.allowed) {
-
           this.resetCursor()
         }
         window.addEventListener('resize', this.checkIfCursorAllowed)
@@ -85,7 +83,7 @@
         this.mouse.allowed = false
         this.cursor.classList.remove('hover')
         this.cursor.classList.remove('dark')
-        window.removeEventListener('mouseout', this.onMouseOut)
+        window.removeEventListener('mouseleave', this.onMouseLeave)
         window.removeEventListener('mousemove', this.onMouseMove)
         this.hoverables.forEach(hoverable => {
           hoverable.removeEventListener('mouseenter', this.onHoverableMouseEnter)
@@ -98,7 +96,7 @@
         const buttons = [...document.querySelectorAll('button')]
         const lights = [...document.querySelectorAll('.mouse-dark')]
         this.hoverables = links.concat(buttons).concat(lights)
-        window.addEventListener('mouseout', this.onMouseOut)
+        window.addEventListener('mouseleave', this.onMouseLeave)
         window.addEventListener('mousemove', this.onMouseMove)
         this.hoverables.forEach(hoverable => {
           hoverable.addEventListener('mouseenter', this.onHoverableMouseEnter)
@@ -109,22 +107,21 @@
         if (this.allowUpdate) {
           this.x = e.clientX
           this.y = e.clientY
-          if (this.cursor.classList.contains('hover')) {
-            TweenLite.to(this.cursor, 0, {x: this.x, y: this.y, opacity: 1})
-            TweenLite.to(this.cursor, .3, {rotation: 45})
-            TweenLite.to(this.follower, .1, {x: this.x, y: this.y, opacity: .5})
-            TweenLite.to(this.follower, .3, {rotation: -225})
 
+          TweenLite.to(this.cursor, 0, {x: this.x, y: this.y, opacity: 1})
+          TweenLite.to(this.follower, .1, {x: this.x, y: this.y, opacity: .5})
+          if (this.cursor.classList.contains('hover')) {
+            TweenLite.to(this.cursor, .3, {rotation: 45})
+            TweenLite.to(this.follower, .3, {rotation: -225})
           } else {
-            TweenLite.to(this.cursor, 0, {x: this.x, y: this.y, opacity: 1})
             TweenLite.to(this.cursor, .3, {rotation: 0})
-            TweenLite.to(this.follower, .1, {x: this.x, y: this.y, opacity: .5})
             TweenLite.to(this.follower, .3, {rotation: 0})
           }
 
         }
       },
-      onMouseOut() {
+      onMouseLeave() {
+        console.log('fired');
         TweenLite.to(this.cursor, .3, {opacity: 0})
         TweenLite.to(this.follower, .5, {opacity: 0})
       },
@@ -182,7 +179,7 @@ html {
     border-radius: 0;
     top: -6px;
     left: -6px;
-    background: rgba(255,255,255,.4);
+    background: rgba(255,255,255,.8);
     + #follower {
       border-radius: 0;
       width: 30px;
@@ -190,7 +187,7 @@ html {
       top: -15px;
       left: -15px;
       background-color: rgba(255,255,255,.1);
-      // background-color: white;
+      // border-color: rgba(255,255,255,.25);
     }
   }
   &.dark {
@@ -234,6 +231,18 @@ body {
   font-family: var(--font-main);
   font-weight: normal;
   cursor: none;
+  &::-webkit-scrollbar {
+    width: 16px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: var(--color-dark);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--color-grey);
+    border: 6px solid var(--color-dark);
+    border-top: 32px solid var(--color-dark);
+    border-radius: 25px;
+  }
 }
 main {
   transition: opacity .75s;

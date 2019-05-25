@@ -7,11 +7,6 @@
         </ul>
       </div>
     </section>
-    <section id="contact">
-      <div class="container">
-        <h2>Contact</h2>
-      </div>
-    </section>
     <SplashScreen v-if="showSplash" />
   </div>
 

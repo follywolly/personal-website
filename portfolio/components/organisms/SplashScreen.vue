@@ -1,6 +1,6 @@
 <template>
   <div class="intro-holder" ref="holder">
-    <div class="intro" ref="card">
+    <div class="intro" ref="inner">
       <div class="intro__image" ref="image">
         <img src="images/eye.png" alt="">
       </div>
@@ -8,7 +8,7 @@
         <div class="intro__title-fg"><span class="intro__title-part">Folkert</span><span class="intro__title-part">-Jan</span></div>
         <div class="intro__title-bg" aria-hidden><span class="intro__title-part intro__title-part--bg">Folkert</span><span class="intro__title-part intro__title-part--bg">-Jan</span></div>
       </h2>
-      <p ref="text" class="intro__sub">Portfolio of a designer who loves to code</p>
+      <p ref="text" class="intro__sub"><span>Portfolio</span> <span>of</span> <span>a</span> <span>designer</span> <span>who</span> <span>loves</span> <span>to</span> <span>code</span></p>
 
       <div class="intro__loader">
         <div class="intro__loader-inner" ref="loader">
@@ -54,6 +54,8 @@ export default {
     const textTops = document.querySelectorAll('.intro__title-part')
     const textBgs = [textTops[2], textTops[3]]
     const text = this.$refs.text
+    const spans = [...text.querySelectorAll('span')]
+
     const button = this.$refs.button
 
     TweenLite.to(image, 1, {y: '-10vh', opacity: 1, delay: .5, onComplete: () => {
@@ -63,19 +65,26 @@ export default {
     TweenLite.to(textBgs[0], 1, {x: '10vw', opacity: 1, delay: 1})
     TweenLite.to(textTops[1], 1, {x: '-10vw', opacity: 1, delay: 1.5})
     TweenLite.to(textBgs[1], 1, {x: '-10vw', opacity: 1, delay: 1.5})
-    TweenLite.to(text, 1, {x: '10vw', opacity: 1, delay: 3})
-    TweenLite.to(button, 1, {y: '-10vh', opacity: 1, delay: 4.5, onComplete: () => {
+    // TweenLite.to(text, 1, {x: '10vw', opacity: 1, delay: 3})
+    spans.forEach((span,i) => {
+      TweenLite.to(span, 1, {opacity: 1, rotation: 0, y: '-.25rem', delay: 2 + .1 * i})
+    })
+    TweenLite.to(button, 1, {y: '-7.5vh', opacity: 1, delay: 4.5, onComplete: () => {
       this.initLoader()
     }})
   },
   methods: {
     toggleSplashScreen() {
-      this.mouse.cursor.classList.remove('hover')
-      this.mouse.cursor.classList.remove('dark')
-      if (!this.$refs.holder) {
+      if (!this.$store.getters.getSplashScreen) {
         return
       }
-      TweenLite.to(this.$refs.holder, 1, {opacity: 0, onComplete: () => {
+      this.mouse.cursor.classList.remove('hover')
+      this.mouse.cursor.classList.remove('dark')
+      // if (!this.$refs.holder) {
+      //   return
+      // }
+      TweenLite.to(this.$refs.button, 1, {y: '20vh', opacity: 0})
+      TweenLite.to(this.$refs.inner, 1, {y: '-100vh', opacity: 0, onComplete: () => {
         this.$store.commit('setSplashScreen', false)
       }})
     },
@@ -102,7 +111,7 @@ export default {
     },
     initHover() {
       this.mouse.allowed = true
-      const card = this.$refs.card
+      const card = this.$refs.inner
       if (!card) return
       card.addEventListener('mousemove', this.update)
       card.addEventListener('mouseout', this.reset)
@@ -110,7 +119,7 @@ export default {
     },
     resetHover() {
       this.mouse.allowed = false
-      const card = this.$refs.card
+      const card = this.$refs.inner
       if (card) {
         card.removeEventListener('mousemove', this.update)
         card.removeEventListener('mouseout', this.reset)
@@ -162,15 +171,28 @@ export default {
       pointer-events: none;
       position: absolute;
       top: 17.5vh;
-      left: 5vw;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
       max-width: 70vw;
-      opacity: 0;
+      // opacity: 0;
       z-index: 4;
       color: white;
       font-size: 1.5rem;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
       @media screen and (min-width: 40rem) {
         top: 20vh;
-        left: 40vw;
+        left: 30vw;
+        transform: translateX(0);
+      }
+      span {
+        display: inline-block;
+        transform-origin: top left;
+        transform: translateY(.25rem) rotate(10deg);
+        opacity: 0;
+        margin: 0 .25rem;
       }
     }
     &__title {
@@ -234,12 +256,12 @@ export default {
       position: relative;
       background: var(--color-dark);
       opacity: 0;
-      top: 35vh;
-      width: 60%;
-      max-width: 20rem;
+      top: 40vh;
+      width: 50%;
+      max-width: 17.5rem;
       pointer-events: none;
       @media screen and (min-width: 40rem) {
-        top: 25vh;
+        top: 30vh;
       }
       img {
         opacity: .5;
@@ -250,7 +272,7 @@ export default {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      bottom: 3vh;
+      bottom: 1rem;
       opacity: 0;
       z-index: 4;
       transition: color .3s, background .3s;

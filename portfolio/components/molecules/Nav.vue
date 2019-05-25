@@ -3,11 +3,13 @@
     <button @click="toggleNav" class="nav__button">Open navigation</button>
     <nav>
       <ul>
-        <li><nuxt-link @click.native="() => {$store.commit('setSplashScreen', true); onClick()}" to="/" data-text="Home">Home <span aria-hidden="true">where the heart is</span></nuxt-link></li>
-        <li><nuxt-link @click.native="onClick" to="/#projects" data-text="Projects">Projects <span aria-hidden="true">stuff i made</span></nuxt-link></li>
-        <li><nuxt-link @click.native="onClick" to="/#contact" data-text="Contact">Contact <span aria-hidden="true">get in touch</span></nuxt-link></li>
+        <li><nuxt-link @click.native="onClick" to="/" data-text="Home">Home</nuxt-link></li>
+        <li><nuxt-link @click.native="onClick" to="/about" data-text="Projects">About</nuxt-link></li>
+        <li><nuxt-link @click.native="onClick" to="/contact" data-text="Contact">Contact</span></nuxt-link></li>
       </ul>
     </nav>
+    <div class="nav__link-follower" ref="follower">
+    </div>
   </div>
 </template>
 
@@ -23,9 +25,44 @@ export default {
   mounted() {
     this.body = document.querySelector('body'),
     this.links = document.querySelectorAll('header nav li')
+    if (process.browser && window.innerWidth > 60 * 16) {
+      const active = document.querySelector('nav .nuxt-link-exact-active')
+      if (!active) {
+        TweenLite.to(this.$refs.follower, .5, {opacity: 0})
+      } else {
+        TweenLite.to(this.$refs.follower, .5, {opacity: 1})
+        TweenLite.to(this.$refs.follower, .5, {left: active.parentNode.offsetLeft, width: active.parentNode.offsetWidth})
+      }
+      this.links.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          TweenLite.to(this.$refs.follower, .5, {left: link.offsetLeft, width: link.offsetWidth, opacity: 1})
+        })
+        link.addEventListener('mouseleave', () => {
+          const current = document.querySelector('nav .nuxt-link-exact-active')
+          if (current) {
+            TweenLite.to(this.$refs.follower, .5, {left: current.parentNode.offsetLeft, width: current.parentNode.offsetWidth})
+          } else {
+            return TweenLite.to(this.$refs.follower, .5, {opacity: 0})
+          }
+        })
+      })
+    }
   },
   watch: {
     $route() {
+      if (window.innerWidth > 60 * 16) {
+        setTimeout(() => {
+          const active = document.querySelector('nav .nuxt-link-exact-active')
+          if (!active) {
+            TweenLite.to(this.$refs.follower, .5, {opacity: 0})
+          } else {
+            TweenLite.to(this.$refs.follower, .5, {left: active.parentNode.offsetLeft, width: active.parentNode.offsetWidth, opacity: 1})
+          }
+
+        }, 0)
+      }
+
+
       if(this.$route.hash) {
         setTimeout(() => {
           if (!this.id) {
@@ -52,11 +89,14 @@ export default {
       }
       this.id = null
       this.toggleNav()
-      TweenLite.to(window, 1.2, { scrollTo: el, delay: .5 })
+      // TweenLite.to(window, 1.2, { scrollTo: el, delay: .5 })
     },
     toggleNav() {
       const links = this.links
       const length = links.length
+      if (window.innerWidth >= 16 * 60) {
+        return
+      }
       if (this.body.classList.contains('nav-open')) {
         links.forEach((link, i) => {
           TweenLite.to(links[length - 1 - i], 0.15, {delay: 0.05 * i, y: 32, opacity: 0, onComplete: () => {
@@ -77,6 +117,19 @@ export default {
 </script>
 
 <style lang="scss">
+  .nav__link-follower {
+    width: 1rem;
+    height: .125rem;
+    position: absolute;
+    top: 2rem;
+    left: 0;
+    background: white;
+    content: "";
+    display: none;
+    @media screen and (min-width: 60rem) {
+      display: block;
+    }
+  }
   .nav__button {
     appearance: none;
     border: 0;
@@ -89,6 +142,9 @@ export default {
     padding: 0;
     z-index: 2;
     cursor: none;
+    @media screen and (min-width: 60rem) {
+      display: none;
+    }
     &:active, &:focus {
       outline: none;
       &::after, &::before {
@@ -112,6 +168,9 @@ export default {
       bottom: 15px;
     }
   }
+  .nav {
+    position: relative;
+  }
   nav {
     position: fixed;
     width: 100vw;
@@ -121,6 +180,15 @@ export default {
     background-color: var(--color-grey);
     transition: all 0.3s;
     padding: 3rem 1.5rem 3rem;
+    @media screen and (min-width: 60rem) {
+      position: relative;
+      width: auto;
+      height: 2rem;
+      right: auto;
+      top: auto;
+      background: transparent;
+      padding: 0;
+    }
     ul {
       list-style: none;
       padding: 0;
@@ -130,6 +198,9 @@ export default {
       text-align: center;
       flex-direction: column;
       height: 100%;
+      @media screen and (min-width: 60rem) {
+        flex-direction: row;
+      }
       li {
         font-size: 1.25rem;
         text-align: center;
@@ -140,6 +211,15 @@ export default {
         opacity: 0;
         @media screen and (min-width: 40rem) {
           padding: 2rem;
+        }
+        @media screen and (min-width: 60rem) {
+          padding: 0;
+          opacity: 1;
+          margin: 0 1rem;
+          top: 0;
+          &:last-of-type {
+            margin-right: 0;
+          }
         }
         a {
           display: block;
@@ -155,6 +235,17 @@ export default {
           z-index: 1;
           -webkit-text-stroke: .5px white;
           transition: color 1s;
+          @media screen and (min-width: 60rem) {
+            font-size: 1.25rem;
+            font-family: var(--font-main);
+            font-weight: 400;
+            color: var(--color-semi-light);
+            -webkit-text-stroke: 0;
+            text-transform: lowercase;
+            &.nuxt-link-exact-active {
+              color: white;
+            }
+          }
           &::after {
             width: 0;
             content: "";
@@ -168,12 +259,18 @@ export default {
             opacity: 0;
             transition: width 0.4s, opacity 0.3s;
             z-index: -1;
+            @media screen and (min-width: 60rem) {
+              display: none;
+            }
           }
           &:hover {
             color: white;
             &::after {
               width: 150%;
               opacity: 1;
+              @media screen and (min-width: 60rem) {
+                width: 110%;
+              }
             }
           }
         }
