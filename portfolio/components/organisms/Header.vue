@@ -44,11 +44,14 @@ export default {
     opacity: 0;
     .top, .bottom {
       width: 100%;
-      padding: 1rem 1.5rem;
+      padding: 1.5rem;
       display: flex;
       justify-content: space-between;
     }
     .top {
+      @media screen and (min-width: 60rem) {
+        padding-top: 3rem;
+      }
       a, button, nav {
         pointer-events: all;
       }
@@ -78,10 +81,10 @@ export default {
       color: white;
       transition: color .3s, opacity .3s;
       opacity: 0;
-      padding: 1.5rem;
       @media screen and (min-width: 60rem) {
         color: var(--color-grey);
         opacity: 1;
+        padding: 1rem 1.5rem 3rem;
         a {
           pointer-events: all
         }

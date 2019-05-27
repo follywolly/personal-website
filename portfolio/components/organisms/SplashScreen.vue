@@ -8,7 +8,9 @@
         <div class="intro__title-fg"><span class="intro__title-part">Folkert</span><span class="intro__title-part">-Jan</span></div>
         <div class="intro__title-bg" aria-hidden><span class="intro__title-part intro__title-part--bg">Folkert</span><span class="intro__title-part intro__title-part--bg">-Jan</span></div>
       </h2>
-      <p ref="text" class="intro__sub"><span>Portfolio</span> <span>of</span> <span>a</span> <span>designer</span> <span>who</span> <span>loves</span> <span>to</span> <span>code</span></p>
+      <p ref="text" class="intro__sub">
+        <!-- <span>Portfolio</span> <span>of</span> <span>a</span> <span>designer</span> <span>who</span> <span>loves</span> <span>to</span> <span>code</span> -->
+      </p>
 
       <div class="intro__loader">
         <div class="intro__loader-inner" ref="loader">

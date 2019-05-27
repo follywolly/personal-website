@@ -3,6 +3,8 @@
     <Header />
     <main>
       <nuxt class="page"/>
+      <div class="page-transitioner">
+      </div>
     </main>
     <div class="page-t">
       <div class="page-t__item"></div>
@@ -110,13 +112,16 @@
 
           TweenLite.to(this.cursor, 0, {x: this.x, y: this.y, opacity: 1})
           TweenLite.to(this.follower, .1, {x: this.x, y: this.y, opacity: .5})
-          if (this.cursor.classList.contains('hover')) {
-            TweenLite.to(this.cursor, .3, {rotation: 45})
-            TweenLite.to(this.follower, .3, {rotation: -225})
-          } else {
-            TweenLite.to(this.cursor, .3, {rotation: 0})
-            TweenLite.to(this.follower, .3, {rotation: 0})
-          }
+
+          // if (this.cursor.classList.contains('hover')) {
+          //   // TweenLite.to(this.cursor, .3, {rotation: 45})
+          //   // TweenLite.to(this.follower, .3, {rotation: -225})
+          //   TweenLite.to(this.follower, 0, {x: this.x, y: this.y, opacity: .5})
+          // } else {
+          //   // TweenLite.to(this.cursor, .3, {rotation: 0})
+          //   // TweenLite.to(this.follower, .3, {rotation: 0})
+          //   TweenLite.to(this.follower, .1, {x: this.x, y: this.y, opacity: .5})
+          // }
 
         }
       },
@@ -130,6 +135,7 @@
           this.cursor.classList.add('dark')
         } else {
           this.cursor.classList.add('hover')
+
         }
       },
       onHoverableMouseLeave(e) {
@@ -137,6 +143,7 @@
           this.cursor.classList.remove('dark')
         } else {
           this.cursor.classList.remove('hover')
+          TweenLite.to(this.follower, .1, {x: this.x, y: this.y, opacity: .5})
         }
       }
     }
@@ -169,25 +176,33 @@ html {
   pointer-events: none;
   z-index: 12;
   opacity: 0;
-  // mix-blend-mode: difference;
+  cursor: none;
   @media screen and (min-width: 60rem) {
     display: block;
   }
   &.hover {
     width: 12px;
     height: 12px;
-    border-radius: 0;
+    // border-radius: 2px;
     top: -6px;
     left: -6px;
     background: rgba(255,255,255,.8);
+    background: white;
+    width: 4rem;
+    height: 4rem;
+    left: -2rem;
+    top: -2rem;
+    mix-blend-mode: difference;
+
     + #follower {
-      border-radius: 0;
-      width: 30px;
-      height: 30px;
-      top: -15px;
-      left: -15px;
-      background-color: rgba(255,255,255,.1);
-      // border-color: rgba(255,255,255,.25);
+      // border-radius: 5px;
+      width: 4rem;
+      height: 4rem;
+      top: -2rem;
+      left: -2rem;
+      opacity: 0;
+      border-color: transparent;
+      transition: transform 0s, all .3s;
     }
   }
   &.dark {
@@ -231,6 +246,7 @@ body {
   font-family: var(--font-main);
   font-weight: normal;
   cursor: none;
+  min-height: 100vh;
   &::-webkit-scrollbar {
     width: 16px;
   }
@@ -280,29 +296,34 @@ p {
   font-size: 1rem;
   font-weight: lighter;
 }
-.page-t {
-  position: fixed;
-  pointer-events: none;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  .page-t__item {
-    background-color: #131313;
-    width: 200vw;
-    content: "";
-    display: block;
-    transform: translateX(-200vw);
-    flex: 1;
+.page-leave-active {
+  transition: opacity 1s;
+  & + .page-transitioner {
+    transition: transform .5s cubic-bezier(1,.01,.85,1);
+    transform: translateX(100vw);
   }
 }
-.page-enter-active, .page-leave-active {
-  transition: opacity .75s;
-}
-.page-enter, .page-leave-active {
+.page-leave-active {
   opacity: 0;
+}
+.page-enter {
+  opacity: 0;
+}
+.page-enter-active {
+  transition: opacity 1s;
+  & + .page-transitioner {
+    transition: transform .5s cubic-bezier(1,.01,.85,1);
+    transform: translateX(200vw);
+  }
+}
+.page-transitioner {
+  position: fixed;
+  top: 0;
+  left: -100vw;
+  bottom: 0;
+  width: 100vw;
+  background-color: var(--color-semi-dark);
+  z-index: 9;
+  // transition: all .3s;
 }
 </style>

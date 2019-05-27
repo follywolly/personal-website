@@ -1,12 +1,10 @@
 <template>
   <div class="home" :class="showSplash ? 'restrained' : ''">
-    <section id="projects">
-      <div class="container">
-        <ul class="work-holder">
-          <Card v-for="(project, i) in projects" :key="project.name" :index="i + 1" :total="projects.length" :project="project" />
-        </ul>
-      </div>
-    </section>
+    <div class="container">
+      <ul class="work-holder">
+        <Card v-for="(project, i) in projects" :key="project.name" :index="i + 1" :total="projects.length" :project="project" />
+      </ul>
+    </div>
     <SplashScreen v-if="showSplash" />
   </div>
 

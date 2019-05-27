@@ -30,13 +30,13 @@ export default {
   methods: {
     onMouseEnter(e, element, index) {
       this.$refs.image.src = this.images[index]
-      
+
       TweenLite.to(this.$refs.image_holder, .5, {x: e.clientX - (this.$refs.image_holder.offsetWidth / 2), y: e.clientY - (this.$refs.image_holder.offsetHeight / 2), opacity: 1})
-      TweenLite.to(this.$refs.title, .3, {color: 'rgba(255,255,255,.1)'})
+      TweenLite.to(this.$refs.title, .1, {color: 'rgba(255,255,255,.1)'})
       this.hovers.forEach(hover => {
-        TweenLite.to(hover, .3, {color: 'rgba(255,255,255,.1)'})
+        TweenLite.to(hover, .1, {color: 'rgba(255,255,255,.1)'})
       })
-      TweenLite.to(element, .3, {color: 'white'})
+      TweenLite.to(element, .1, {color: 'white'})
     },
     onMouseMove(e) {
       TweenLite.to(this.$refs.image_holder, .5, {x: e.clientX - (this.$refs.image_holder.offsetWidth / 2), y: e.clientY - (this.$refs.image_holder.offsetHeight / 2), opacity: 1})
@@ -63,10 +63,10 @@ export default {
       font-weight: 400;
       position: relative;
       z-index: 2;
-      transition: color .3s;
+      transition: color .1s;
       color: var(--color-semi-light);
       span {
-        transition: color .3s;
+        transition: color .1s;
 
         color: var(--color-light);
       }

@@ -14,7 +14,7 @@
           <h3 class="title">{{project.title}}</h3>
         </div>
       </div>
-      {{modIndex}}
+      <div class="card__count"><span class="card__count-current">{{modIndex}}</span> / {{total}}</div>
       <div class="card__button">
         read more
       </div>
@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     modIndex() {
-      return this.total > 9 ? `0${this.index} / ${this.total}` : `${this.index} / ${this.total}`
+      return this.total > 9 ? '0' + this.index : this.index
     },
     allowUpdate() {
       const refreshRate = 10
@@ -136,6 +136,13 @@ export default {
     left: 0;
     width: 100%;
     bottom: 0;
+  }
+  &__count {
+    font-size: .875rem;
+    &-current {
+      font-size: 1.5rem;
+      font-weight: 900;
+    }
   }
   &__button {
     position: absolute;

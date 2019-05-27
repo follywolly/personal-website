@@ -57,16 +57,16 @@ export default {
   mounted() {
     if (process.browser) {
       this.$store.commit('setSplashScreen', false)
-      
+
       const img = this.$refs.banner
       const title = this.$refs.title
       const description = this.$refs.description
       const meta = this.$refs.meta
-      TweenLite.to(img, 1, {x: '-10vw'})
-      TweenLite.to(title, 1, {opacity: 1, y: -16, delay: .75})
-      TweenLite.to(description, 1, {opacity: 1, y: -16, delay: 1.25})
+      TweenLite.to(img, .5, {x: '-10vw'})
+      TweenLite.to(title, .5, {opacity: 1, y: -16, delay: .75})
+      TweenLite.to(description, .5, {opacity: 1, y: -16, delay: 1.25})
       if (meta) {
-        TweenLite.to(meta, 1, {opacity: 1, y: -16, delay: 1.75})
+        TweenLite.to(meta, .5, {opacity: 1, y: -16, delay: 1.75})
       }
 
       if (observer.exists) {
@@ -76,7 +76,7 @@ export default {
 
         const titleIntersector = observer.generate(this.slideInLeft)
         const paragraphIntersector = observer.generate(this.fadeIn)
-        const imageIntersector = observer.generate(this.slideInRight, 0.01)
+        const imageIntersector = observer.generate(this.slideInRight, 0.1)
 
         titles.forEach(title => {
           title.classList.add('observable')
@@ -96,14 +96,14 @@ export default {
   },
   methods: {
     slideInLeft(entry) {
-      TweenLite.to(entry.target, 1, {delay: .5, x: 32, opacity: 1})
+      TweenLite.to(entry.target, .5, {delay: .5, x: 24, opacity: 1})
     },
     slideInRight(entry) {
       if (!entry.target.src) entry.target.src = entry.target.dataset.src
       TweenLite.to(entry.target, 1, {x: '-10vw', opacity: 1, delay: .5})
     },
     fadeIn(entry) {
-      TweenLite.to(entry.target, 1, {delay: .5, y: -32, opacity: 1})
+      TweenLite.to(entry.target, .5, {delay: .5, y: -24, opacity: 1})
     }
   }
 }
@@ -225,14 +225,14 @@ export default {
         font-size: 3rem;
         &.observable {
           position: relative;
-          left: -2rem;
+          left: -1.5rem;
           opacity: 0;
         }
       }
       p {
         &.observable {
           position: relative;
-          top: 2rem;
+          top: 1.5rem;
           opacity: 0;
         }
       }
