@@ -27,7 +27,12 @@ export default {
     Socials
   },
   mounted() {
-    TweenLite.to(this.$refs.header, 1, {opacity: 1, delay: 4})
+
+    if (this.$router.currentRoute.name === 'index') {
+      TweenLite.to(this.$refs.header, 1, {opacity: 1, delay: 4})
+    } else {
+      TweenLite.to(this.$refs.header, 1, {opacity: 1})
+    }
   }
 }
 </script>
@@ -50,7 +55,7 @@ export default {
     }
     .top {
       @media screen and (min-width: 60rem) {
-        padding-top: 3rem;
+        padding-top: 2rem;
       }
       a, button, nav {
         pointer-events: all;
@@ -84,7 +89,7 @@ export default {
       @media screen and (min-width: 60rem) {
         color: var(--color-grey);
         opacity: 1;
-        padding: 1rem 1.5rem 3rem;
+        padding: 1rem 1.5rem 2rem;
         a {
           pointer-events: all
         }

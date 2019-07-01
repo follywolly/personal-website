@@ -19,6 +19,9 @@
             </h3>
           </li>
         </ul>
+        <div class="project__meta-link" ref="link">
+          <a :href="project.href" class="project__meta-anchor in-out-link" data-text="visit site">visit site</a>
+        </div>
       </div>
     </div>
     <div class="project__banner">
@@ -49,6 +52,7 @@ import { TweenLite } from 'gsap'
 import observer from '~/components/modules/observer.js'
 
 export default {
+  transition: { css: false },
   computed: {
     project() {
       return this.$store.getters.getProjects(this.$route.params.slug)
@@ -62,11 +66,13 @@ export default {
       const title = this.$refs.title
       const description = this.$refs.description
       const meta = this.$refs.meta
+      const link = this.$refs.link
       TweenLite.to(img, .5, {x: '-10vw'})
       TweenLite.to(title, .5, {opacity: 1, y: -16, delay: .75})
       TweenLite.to(description, .5, {opacity: 1, y: -16, delay: 1.25})
       if (meta) {
         TweenLite.to(meta, .5, {opacity: 1, y: -16, delay: 1.75})
+        TweenLite.to(link, .5, {opacity: 1, delay: 2.25})
       }
 
       if (observer.exists) {
@@ -112,6 +118,7 @@ export default {
   .project {
     // position: relative;
     padding-top: 5rem;
+    min-height: 100vh;
     p {
       max-width: 30rem;
       margin: 1rem 0;
@@ -174,11 +181,39 @@ export default {
       }
       .container {
         padding: 0;
+        display: flex;
+        flex-direction: column;
         @media screen and (min-width: 40rem) {
           padding: 0 1.5rem;
+          flex-direction: row;
         }
       }
+      &-link {
+        width: 100%;
+        max-width: 7.5rem;
+        position: relative;
+        opacity: 0;
+        display: none;
+        box-shadow: 0px 3px 10px rgba(0,0,0,0.2);
+        @media screen and (min-width: 40rem) {
+          display: block;
+        }
+      }
+      &-anchor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        bottom: 0;
+        white-space: nowrap;
+        padding: 1rem 2rem;
+        background-color: var(--color-light);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       &-list {
+        box-shadow: 0px 3px 10px rgba(0,0,0,0.2);
         position: relative;
         top: 1rem;
         opacity: 0;
@@ -212,7 +247,7 @@ export default {
             color: var(--color-semi-light);
           }
           &--value {
-            font-weight: 600;
+            font-weight: 900;
           }
         }
       }

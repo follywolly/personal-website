@@ -1,5 +1,5 @@
 <template>
-  <div class="card" ref="card">
+  <li class="card" ref="card">
     <nuxt-link :to="`/projects/${slug}`" class="card__link">
       <div class="card__image-holder" ref="image">
         <figure class="card__image">
@@ -20,7 +20,7 @@
       </div>
 
     </nuxt-link>
-  </div>
+  </li>
 </template>
 <script>
 import { TweenLite } from 'gsap'
@@ -98,7 +98,10 @@ export default {
     },
     reset() {
       this.mouse.cursor.classList.remove('hover')
-      this.$refs.image.style = `transform: rotateX(0deg) rotateY(0deg); transition: transform 1s`
+      const image = this.$refs.image
+      if (image) {
+        image.style = `transform: rotateX(0deg) rotateY(0deg); transition: transform 1s`
+      }
     },
     update(event) {
       if (!this.allowUpdate) return
@@ -110,8 +113,10 @@ export default {
 
       const x = (this.mouse.y / this.$refs.image.offsetHeight / 2).toFixed(2)
       const y = (this.mouse.x / this.$refs.image.offsetWidth / 2).toFixed(2)
-
-      this.$refs.image.style = `transform: rotateX(${x * 30}deg) rotateY(${y * 30}deg);`
+      const image = this.$refs.image
+      if (image) {
+        image.style = `transform: rotateX(${x * 30}deg) rotateY(${y * 30}deg);`
+      }
     }
   }
 }

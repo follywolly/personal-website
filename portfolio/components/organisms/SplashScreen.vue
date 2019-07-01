@@ -6,10 +6,10 @@
       </div>
       <h2 class="intro__title">
         <div class="intro__title-fg"><span class="intro__title-part">Folkert</span><span class="intro__title-part">-Jan</span></div>
-        <div class="intro__title-bg" aria-hidden><span class="intro__title-part intro__title-part--bg">Folkert</span><span class="intro__title-part intro__title-part--bg">-Jan</span></div>
+        <div class="intro__title-bg" aria-hidden="true"><span class="intro__title-part intro__title-part--bg">Folkert</span><span class="intro__title-part intro__title-part--bg">-Jan</span></div>
       </h2>
       <p ref="text" class="intro__sub">
-        <!-- <span>Portfolio</span> <span>of</span> <span>a</span> <span>designer</span> <span>who</span> <span>loves</span> <span>to</span> <span>code</span> -->
+        <span>Digital</span> <span>designer</span> <span>and</span> <span>front-end</span> <span>developer</span>
       </p>
 
       <div class="intro__loader">
@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div ref="button" class="intro__link mouse-dark">
+    <div ref="button" class="intro__link">
       <button @click="toggleSplashScreen">enter</button>
     </div>
   </div>
@@ -85,8 +85,8 @@ export default {
       // if (!this.$refs.holder) {
       //   return
       // }
-      TweenLite.to(this.$refs.button, 1, {y: '20vh', opacity: 0})
-      TweenLite.to(this.$refs.inner, 1, {y: '-100vh', opacity: 0, onComplete: () => {
+      TweenLite.to(this.$refs.button, .5, {y: '-100vh'})
+      TweenLite.to(this.$refs.inner, .5, {y: '-100vh', onComplete: () => {
         this.$store.commit('setSplashScreen', false)
       }})
     },

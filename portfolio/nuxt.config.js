@@ -49,6 +49,15 @@ module.exports = {
   modules: [
   ],
 
+  generate: {
+    routes: [
+      '/projects/rainforest-alliance',
+      '/projects/katalysisio',
+      '/projects/maat-creative',
+      '/projects/blue-ivy-amsterdam',
+    ]
+  },
+
   router: {
     // scrollBehavior: async (to, from, savedPosition) => {
     //   if (savedPosition) {

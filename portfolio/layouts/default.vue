@@ -6,11 +6,6 @@
       <div class="page-transitioner">
       </div>
     </main>
-    <div class="page-t">
-      <div class="page-t__item"></div>
-      <div class="page-t__item"></div>
-      <div class="page-t__item"></div>
-    </div>
     <div id="cursor">
     </div>
     <div id="follower">
@@ -61,8 +56,10 @@
       $route(to, from) {
         setTimeout(() => {
           this.resetCursor()
-          this.checkIfCursorAllowed()
-        }, 1000)
+          setTimeout(() => {
+            this.checkIfCursorAllowed()
+          }, 0)
+        }, 1200)
       }
     },
     computed: {
@@ -287,6 +284,45 @@ a {
   &:hover {
     color: white;
   }
+  &.in-out-link {
+    overflow: hidden;
+    color: transparent;
+    &::after, &::before {
+      position: absolute;
+      content: attr(data-text);
+      display: block;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      min-height: 1rem;
+      text-align: center;
+      transition: transform .3s;
+      color: var(--color-dark);
+    }
+    &::before {
+      left: -100%;
+    }
+    &::after {
+      left: 0;
+    }
+    &:hover {
+      color: transparent;
+      &::after, &::before {
+        color: var(--color-dark);
+        transform: translate(100%, -50%);
+      }
+    }
+    &--light {
+      &::before, &::after {
+        color: var(--color-light);
+      }
+      &:hover {
+        &::before, &::after {
+          color: var(--color-light);
+        }
+      }
+    }
+  }
 }
 button {
   cursor: none;
@@ -295,6 +331,11 @@ p {
   text-transform: lowercase;
   font-size: 1rem;
   font-weight: lighter;
+  max-width: 35rem;
+  margin: 1.5rem 0;
+}
+.page {
+  min-height: 100vh;
 }
 .page-leave-active {
   transition: opacity 1s;

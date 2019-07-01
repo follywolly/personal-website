@@ -1,6 +1,6 @@
 <template>
   <div class="logo">
-    <nuxt-link to="/">
+    <nuxt-link to="/" aria-label="Navigate to home screen">
       <div class="eye__holder">
         <div class="eye__lashes">
         </div>
