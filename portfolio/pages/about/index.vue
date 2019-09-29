@@ -87,6 +87,12 @@ export default {
 <style lang="scss">
   .about {
     padding-top: 5rem;
+    padding-bottom: 5rem;
+    @media screen and (min-width: 60rem) {
+      padding-top: 10rem;
+      padding-bottom: 10rem;
+    }
+
     &__title {
       font-size: 1.5rem;
       font-weight: 400;

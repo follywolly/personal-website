@@ -178,7 +178,7 @@ export default {
     right: -100vw;
     top: 0;
     background-color: var(--color-grey);
-    transition: all 0.3s;
+    transition: all 0.7s;
     padding: 3rem 1.5rem 3rem;
     @media screen and (min-width: 60rem) {
       position: relative;

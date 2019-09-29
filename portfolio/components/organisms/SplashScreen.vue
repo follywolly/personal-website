@@ -12,13 +12,13 @@
         <span>Digital</span> <span>designer</span> <span>and</span> <span>front-end</span> <span>developer</span>
       </p>
 
-      <div class="intro__loader">
+      <!-- <div class="intro__loader">
         <div class="intro__loader-inner" ref="loader">
         </div>
-      </div>
+      </div> -->
     </div>
     <div ref="button" class="intro__link">
-      <button @click="toggleSplashScreen">enter</button>
+      <!-- <button @click="toggleSplashScreen">enter</button> -->
     </div>
   </div>
 
@@ -72,7 +72,7 @@ export default {
       TweenLite.to(span, 1, {opacity: 1, rotation: 0, y: '-.25rem', delay: 2 + .1 * i})
     })
     TweenLite.to(button, 1, {y: '-7.5vh', opacity: 1, delay: 4.5, onComplete: () => {
-      this.initLoader()
+      // this.initLoader()
     }})
   },
   methods: {
@@ -156,13 +156,14 @@ export default {
 
 <style lang="scss">
   .intro {
-    position: fixed;
-    top: 0;
-    left: 0;
+    // position: fixed;
+    // top: 0;
+    // left: 0;
     z-index: 4;
     height: 100vh;
     width: 100%;
-    background: var(--color-dark);
+    position: relative;
+    // background: var(--color-dark);
     display: flex;
     // justify-content: center;
     align-items: center;

@@ -52,7 +52,9 @@ import { TweenLite } from 'gsap'
 import observer from '~/components/modules/observer.js'
 
 export default {
-  transition: { css: false },
+  transition: {
+    css: true
+  },
   computed: {
     project() {
       return this.$store.getters.getProjects(this.$route.params.slug)

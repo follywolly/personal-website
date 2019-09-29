@@ -1,42 +1,51 @@
-const Koa = require('koa')
+const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
-
-const app = new Koa()
+const app = express()
+const save = require('./save.js')
+const get = require('./get.js')
+const post = require('./post.js')
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+require('dotenv').config()
 
 // Import and Set Nuxt.js options
-let config = require('../nuxt.config.js')
-config.dev = !(app.env === 'production')
+const config = require('../nuxt.config.js')
+config.dev = !(process.env.NODE_ENV === 'production')
 
 async function start() {
-  // Instantiate nuxt.js
+  // Init Nuxt.js
   const nuxt = new Nuxt(config)
 
-  const {
-    host = process.env.HOST || '127.0.0.1',
-    port = process.env.PORT || 3000
-  } = nuxt.options.server
+  const { host, port } = nuxt.options.server
 
-  // Build in development
+  // Build only in dev mode
   if (config.dev) {
     const builder = new Builder(nuxt)
     await builder.build()
   } else {
     await nuxt.ready()
   }
+  app.use(bodyParser.json())
+  // app.get('/', save.ip)
+  app.get('/geos', get.geos)
+  app.post('/note', post.note)
+  // Give nuxt middleware to express
+  app.use(nuxt.render)
 
-  app.use(ctx => {
-    ctx.status = 200
-    ctx.respond = false // Bypass Koa's built-in response handling
-    ctx.req.ctx = ctx // This might be useful later on, e.g. in nuxtServerInit or with nuxt-stash
-    nuxt.render(ctx.req, ctx.res)
-  })
-
+  // Listen the server
   app.listen(port, host)
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true
   })
 }
-
-start()
+const database = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@portfolio-0itkc.mongodb.net/portfolio?retryWrites=true&w=majority`
+mongoose
+  .connect(database, {useNewUrlParser: true})
+  .then(() => {
+    start()
+  })
+  .catch(e => {
+    throw e
+  })

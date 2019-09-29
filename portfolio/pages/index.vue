@@ -1,13 +1,26 @@
 <template>
-  <div class="home" :class="showSplash ? 'restrained' : ''">
+  <!-- <div class="home" :class="showSplash ? 'restrained' : ''"> -->
+  <div class="home">
+    <SplashScreen />
+
     <div class="container">
       <ul class="work-holder">
         <Card v-for="(project, i) in projects" :key="project.name" :index="i + 1" :total="projects.length" :project="project" />
       </ul>
     </div>
-    <SplashScreen v-if="showSplash" />
-  </div>
+    <!-- <SplashScreen v-if="showSplash" /> -->
+    <div class="button-section">
+      <h2 class="note-button-title">Leave a visitor's note</h2>
+      <div class="button-holder">
+        <button class="note-button hoverable" @click="postNote('hearth')"><span>❤️</span> Love</button>
+        <button class="note-button hoverable" @click="postNote('wave')"><span>👋</span> Wave</button>
+        <button class="note-button hoverable" @click="postNote('eye')"><span>👁️</span> Eye see you</button>
+      </div>
+      <div id="input">
 
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -43,28 +56,57 @@ export default {
     const cardIntersector = observer.generate(this.fadeIn, .25)
     const cards = document.querySelectorAll('.card')
 
-    if (!cards.length || cards.length === 0) {
-      return
+    if (cards.length && cards.length > 0) {
+      cards.forEach(card => {
+        card.classList.add('observable')
+        cardIntersector.observe(card)
+      })
     }
-    cards.forEach(card => {
-      card.classList.add('observable')
-      cardIntersector.observe(card)
-    })
+
+    const buttonIntersector = observer.generate(this.fadeInButtons, .25)
+    const titleIntersector = observer.generate(this.fadeInTitle, .25)
+
+    const buttons = [...document.querySelectorAll('.note-button')]
+    const buttonTitle = document.querySelector('.note-button-title')
+
+    if (buttonTitle) {
+      buttonTitle.classList.add('observable')
+      titleIntersector.observe(buttonTitle)
+    }
+    if (buttons.length && buttons.length > 0) {
+      buttons.forEach(button => {
+        button.classList.add('observable')
+        buttonIntersector.observe(button)
+      })
+    }
+
   },
   methods: {
+    postNote(emoji) {
+      const body = JSON.stringify({emoji})
+      fetch('/note', {
+        method: 'POST',
+        body,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(() => {
+        console.log('send');
+      })
+      .catch(e => {
+        console.log(e);
+      })
+    },
     fadeIn(entry) {
-      // window.addEventListener('scroll', (e) => {
-      //   const top = entry.target.getBoundingClientRect().top
-      //   const perc = 1 - top / window.innerHeight
-      //   if (top > 0) {
-      //     TweenLite.to(entry.target, .1, {z: -100 + 100 * perc})
-      //   }
-      //   if (top > window.innerHeight / 2) {
-      //     TweenLite.to(entry.target, .1, {z: 0 - 100 * perc})
-      //   }
-      // })
       const img = entry.target.querySelector('.card__image--inner')
       if (!img.src) img.src = img.dataset.src
+      TweenLite.to(entry.target, 1, {delay: .3, y: -64, opacity: 1})
+    },
+    fadeInButtons(entry) {
+      TweenLite.to(entry.target, 1, {delay: .6, y: -64, opacity: 1})
+    },
+    fadeInTitle(entry) {
       TweenLite.to(entry.target, 1, {delay: .3, y: -64, opacity: 1})
     }
   }
@@ -73,7 +115,7 @@ export default {
 
 <style lang="scss">
   .home {
-    padding-top: 5rem;
+    // padding-top: 5rem;
     &.restrained {
       max-height: 100vh;
       overflow-y: hidden;
@@ -87,6 +129,46 @@ export default {
     margin: 1rem 0;
     span {
       white-space: nowrap;
+    }
+  }
+  .button-section {
+    padding-bottom: 20rem;
+    .note-button-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      &.observable {
+        position: relative;
+        top: 4rem;
+        opacity: 0;
+      }
+    }
+    .button-holder {
+      display: flex;
+      max-width: 60rem;
+      margin: 0 auto;
+      justify-content: center;
+      button {
+        background: transparent;
+        border: none;
+        // border: 1px solid red;
+        // padding: 1rem;
+        width: 3rem;
+        color: transparent;
+        margin: 0 1rem;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        &.observable {
+          position: relative;
+          top: 4rem;
+          opacity: 0;
+        }
+        span {
+          color: white;
+          display: block;
+          font-size: 2rem;
+        }
+      }
     }
   }
   .work-holder {
