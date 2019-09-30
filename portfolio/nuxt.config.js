@@ -47,8 +47,13 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/google-analytics'
   ],
 
+  googleAnalytics: {
+    id: 'UA-103649458-1'
+  },
+  
   generate: {
     routes: [
       '/projects/rainforest-alliance',

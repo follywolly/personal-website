@@ -32,6 +32,12 @@
     <section class="project__section project__summary">
       <div class="container">
         <h3 class="project__section-title">Summary</h3>
+        <div class="project__section-technologies" v-if="project.technologies && project.technologies.length > 0">
+          <h4 class="project__section-technologies-title">Technologies:</h4>
+          <ul class="project__section-technologies-list">
+            <li class="project__section-technologies-list-item" v-for="technology in project.technologies" :key="technology"><p>{{technology}}</p></li>
+          </ul>
+        </div>
         <div v-html="project.summary.content">
 
         </div>
@@ -52,9 +58,6 @@ import { TweenLite } from 'gsap'
 import observer from '~/components/modules/observer.js'
 
 export default {
-  transition: {
-    css: true
-  },
   computed: {
     project() {
       return this.$store.getters.getProjects(this.$route.params.slug)
@@ -79,7 +82,8 @@ export default {
 
       if (observer.exists) {
         const titles = document.querySelectorAll('.project__section-title')
-        const paragraphs = document.querySelectorAll('.project__section p')
+        const paragraphs = [...document.querySelectorAll('.project__section p')]
+        paragraphs.push(document.querySelector('.project__section-technologies-title'))
         const images = document.querySelectorAll('.project__img--section')
 
         const titleIntersector = observer.generate(this.slideInLeft)
@@ -122,8 +126,12 @@ export default {
     padding-top: 5rem;
     min-height: 100vh;
     p {
+      text-transform: none;
       max-width: 30rem;
       margin: 1rem 0;
+      a {
+        border-bottom: 2px solid var(--color-light);
+      }
     }
     &__title {
       font-size: 4rem;
@@ -157,7 +165,6 @@ export default {
       &--section {
         min-height: 10rem;
         height: 80vh;
-
       }
     }
     &__img {
@@ -264,6 +271,34 @@ export default {
           position: relative;
           left: -1.5rem;
           opacity: 0;
+        }
+      }
+      &-technologies {
+        padding: 1rem 0;
+        display: flex;
+        &-title {
+          font-weight: normal;
+          font-style: italic;
+          color: inherit;
+          margin-bottom: 0;
+          margin-right: 2rem;
+          &.observable {
+            position: relative;
+            top: 1.5rem;
+            opacity: 0;
+          }
+        }
+        &-list {
+          padding: 0;
+          margin: 0;
+          display: flex;
+          list-style: none;
+          &-item {
+            margin: 0 .5rem;
+            p {
+              margin: 0;
+            }
+          }
         }
       }
       p {

@@ -9,17 +9,18 @@
       </ul>
     </div>
     <!-- <SplashScreen v-if="showSplash" /> -->
-    <div class="button-section">
+    <!-- <div class="button-section">
       <h2 class="note-button-title">Leave a visitor's note</h2>
       <div class="button-holder">
-        <button class="note-button hoverable" @click="postNote('hearth')"><span>❤️</span> Love</button>
-        <button class="note-button hoverable" @click="postNote('wave')"><span>👋</span> Wave</button>
-        <button class="note-button hoverable" @click="postNote('eye')"><span>👁️</span> Eye see you</button>
+        <button class="note-button hoverable" @click="e => postNote(e, 'hearth')"><span data-content="❤️" aria-label="Love">❤️</span></button>
+        <button class="note-button hoverable" @click="e => postNote(e, 'wave')"><span data-content="👋" aria-label="Wave">👋</span></button>
+        <button class="note-button hoverable" @click="e => postNote(e, 'eye')"><span data-content="👁️" aria-label="Eye see you">👁️</span></button>
       </div>
+      <span class="note-button-conditions text-small text-center">* this action will save the city you are currently visiting the site from</span>
       <div id="input">
 
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -65,13 +66,19 @@ export default {
 
     const buttonIntersector = observer.generate(this.fadeInButtons, .25)
     const titleIntersector = observer.generate(this.fadeInTitle, .25)
+    const conditionsIntersector = observer.generate(this.fadeInConditions, .25)
 
     const buttons = [...document.querySelectorAll('.note-button')]
     const buttonTitle = document.querySelector('.note-button-title')
+    const buttonConditions = document.querySelector('.note-button-conditions')
 
     if (buttonTitle) {
       buttonTitle.classList.add('observable')
       titleIntersector.observe(buttonTitle)
+    }
+    if (buttonConditions) {
+      buttonConditions.classList.add('observable')
+      conditionsIntersector.observe(buttonConditions)
     }
     if (buttons.length && buttons.length > 0) {
       buttons.forEach(button => {
@@ -82,7 +89,8 @@ export default {
 
   },
   methods: {
-    postNote(emoji) {
+    postNote(e, emoji) {
+      this.animateClick(e.target)
       const body = JSON.stringify({emoji})
       fetch('/note', {
         method: 'POST',
@@ -98,16 +106,27 @@ export default {
         console.log(e);
       })
     },
+    animateClick(target) {
+      target.classList.add('clicked')
+      const remove = function() {
+        target.classList.remove('clicked')
+        target.removeEventListener('transitionend', this)
+      }
+      target.addEventListener('transitionend', remove)
+    },
     fadeIn(entry) {
       const img = entry.target.querySelector('.card__image--inner')
       if (!img.src) img.src = img.dataset.src
       TweenLite.to(entry.target, 1, {delay: .3, y: -64, opacity: 1})
     },
     fadeInButtons(entry) {
-      TweenLite.to(entry.target, 1, {delay: .6, y: -64, opacity: 1})
+      TweenLite.to(entry.target, 1, {delay: .6, y: -48, opacity: 1})
     },
     fadeInTitle(entry) {
-      TweenLite.to(entry.target, 1, {delay: .3, y: -64, opacity: 1})
+      TweenLite.to(entry.target, 1, {delay: .3, y: -48, opacity: 1})
+    },
+    fadeInConditions(entry) {
+      TweenLite.to(entry.target, 1, {delay: .9, y: -48, opacity: 1})
     }
   }
 }
@@ -138,35 +157,68 @@ export default {
       margin-bottom: 3rem;
       &.observable {
         position: relative;
-        top: 4rem;
+        top: 3rem;
+        opacity: 0;
+      }
+    }
+    .note-button-conditions {
+      max-width: 16rem;
+      &.observable {
+        position: relative;
+        top: 3rem;
         opacity: 0;
       }
     }
     .button-holder {
       display: flex;
       max-width: 60rem;
-      margin: 0 auto;
+      margin: 0 auto 2rem;
       justify-content: center;
       button {
         background: transparent;
         border: none;
         // border: 1px solid red;
         // padding: 1rem;
-        width: 3rem;
+        width: 4rem;
         color: transparent;
         margin: 0 1rem;
         text-align: center;
         white-space: nowrap;
-        overflow: hidden;
+        // overflow: hidden;
+        &:focus, &:hover {
+          outline: none;
+          span {
+            transform: scale(1.1);
+          }
+        }
         &.observable {
           position: relative;
-          top: 4rem;
+          top: 3rem;
           opacity: 0;
         }
         span {
           color: white;
           display: block;
           font-size: 2rem;
+          position: relative;
+          transition: transform .3s;
+          &::after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: .5;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            content: attr(data-content);
+          }
+          &.clicked {
+            &::after {
+              transition: all 2s;
+              transform: translateY(-100vh);
+              opacity: 0;
+            }
+          }
         }
       }
     }

@@ -29,7 +29,7 @@ export default {
   mounted() {
 
     if (this.$router.currentRoute.name === 'index') {
-      TweenLite.to(this.$refs.header, 1, {opacity: 1, delay: 4})
+      TweenLite.to(this.$refs.header, 1, {opacity: 1, delay: 2})
     } else {
       TweenLite.to(this.$refs.header, 1, {opacity: 1})
     }

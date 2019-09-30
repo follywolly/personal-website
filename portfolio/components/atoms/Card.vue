@@ -141,6 +141,13 @@ export default {
     left: 0;
     width: 100%;
     bottom: 0;
+    &:focus {
+      outline: none;
+      .card__image {
+        transform: scale(1.10);
+      }
+    }
+
   }
   &__count {
     font-size: .875rem;

@@ -11,7 +11,8 @@
     <section>
       <div class="container">
         <p class="about__title">Through design research, digital design and a user-centered approach I help clients aquire digital products that enhance the core values of their businesses.</p>
-        <p class="about__title">In march of 2018 I joined forces with Troop, where we collaborate with a team of freelancers to tackle complex projects for a variety of companies.</p>
+        <p class="about__title">In march of 2018 me and three others as a team won a hackaton organised by the International Air Transport Association (IATA). This got us flown to Istanbul where I talked at their conference about the future of learning in the aviation industry.</p>
+        <p class="about__title">On the 29th of april 2019 I got selected to be part of TNW & Accenture's T500 2019, which is a list of the 500 most promising entrepreneurs, developers and designers under 26 that are working in tech.</p>
       </div>
     </section>
     <!-- <section>
@@ -104,16 +105,17 @@ export default {
       text-transform: none;
       top: 1.5rem;
       opacity: 0;
+      max-width: 25em;
       span {
         transition: color .1s;
 
         color: var(--color-light);
       }
       @media screen and (min-width: 40rem) {
-        font-size: 2rem;
+        font-size: 1.75rem;
       }
       @media screen and (min-width: 60rem) {
-        font-size: 2.5rem;
+        font-size: 2rem;
       }
     }
     &__image-holder {

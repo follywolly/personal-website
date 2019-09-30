@@ -335,6 +335,19 @@ p {
   max-width: 35rem;
   margin: 1.5rem 0;
 }
+
+.text {
+  &-center {
+    display: block;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  &-small{
+    font-size: .75rem;
+    opacity: .75;
+  }
+}
 .page {
   min-height: 100vh;
 }
