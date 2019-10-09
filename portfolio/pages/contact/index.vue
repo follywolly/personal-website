@@ -79,6 +79,7 @@ export default {
     .contact__link {
       display: block;
       margin-bottom: 1.5rem;
+      max-width: 20rem;
       span {
         display: block;
         font-style: italic;

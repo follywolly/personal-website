@@ -53,11 +53,11 @@ module.exports = {
   googleAnalytics: {
     id: 'UA-103649458-1'
   },
-  
+
   generate: {
     routes: [
       '/projects/rainforest-alliance',
-      '/projects/katalysisio',
+      '/projects/quality-tv',
       '/projects/maat-creative',
       '/projects/blue-ivy-amsterdam',
     ]
