@@ -2,6 +2,8 @@
   <!-- <div class="home" :class="showSplash ? 'restrained' : ''"> -->
   <div class="home">
     <SplashScreen />
+    
+    <button ref="button" @click="scrollDown" class="home__scroll-button">scroll for work<div ref="button_after" class="home__scroll-button--after"></div></button>
 
     <div class="container">
       <ul class="work-holder">
@@ -30,6 +32,11 @@ import SplashScreen from '~/components/organisms/SplashScreen.vue'
 import { TweenLite } from 'gsap'
 import observer from '~/components/modules/observer.js'
 export default {
+  head: {
+    script: [
+      {src: 'https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/plugins/ScrollToPlugin.min.js'}
+    ]
+  },
   components: {
     Card,
     SplashScreen
@@ -52,7 +59,11 @@ export default {
         const img = card.querySelector('.card__image--inner')
         img.src = img.dataset.src
       })
+      return
     }
+
+    TweenLite.to(this.$refs.button, .5, {opacity: 1, delay: 3})
+    TweenLite.to(this.$refs.button_after, .5, {height: 40, delay: 3.5})
 
     const cardIntersector = observer.generate(this.fadeIn, .25)
     const cards = document.querySelectorAll('.card')
@@ -89,6 +100,10 @@ export default {
 
   },
   methods: {
+    scrollDown() {
+      console.log('clickity')
+      TweenLite.to(window, 1, {scrollTo: window.innerHeight})
+    },
     postNote(e, emoji) {
       this.animateClick(e.target)
       const body = JSON.stringify({emoji})
@@ -138,6 +153,31 @@ export default {
     &.restrained {
       max-height: 100vh;
       overflow-y: hidden;
+    }
+    &__scroll-button {
+      opacity: 0;
+      bottom: 1rem;
+      z-index: 24;
+      appearance: none;
+      color: var(--color-grey);
+      position: absolute;
+      padding-top: 1rem;
+      padding-bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font: inherit;
+      background: none;
+      border: none;
+      &--after {
+        position: absolute;
+        top: 3rem;
+        left: 50%;
+        transform: translateX(-50%);
+        content: '';
+        width: 1px;
+        height: 0;
+        background-color: var(--color-grey);
+      }
     }
   }
   main {

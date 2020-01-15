@@ -8,14 +8,19 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: pkg.name,
+    title: 'Folkert-Jan van der Pol - Webdeveloper Portfolio',
     htmlAttrs: {
       lang: 'en',
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      { name: 'theme-color', content: '#131313'},
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Folkert-Jan van der Pol - Webdeveloper Portfolio'
+      }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -58,7 +63,6 @@ module.exports = {
     routes: [
       '/projects/rainforest-alliance',
       '/projects/quality-tv',
-      '/projects/maat-creative',
       '/projects/blue-ivy-amsterdam',
     ]
   },

@@ -1,14 +1,3 @@
-# vue-wp-rest-portfolio
+# Personal Site
 
-## About
-### Person
-### Way of working
-
-## Showcase
-### Way of working
-
-### Experiences 
-
-## Clients
-
-## Contact
+[[live version](https://folkertjan.nl)]

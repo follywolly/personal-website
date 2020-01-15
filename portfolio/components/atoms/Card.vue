@@ -221,7 +221,7 @@ export default {
       }
     }
     &-outline {
-      z-index: 2;
+      z-index: 3;
       .title {
         color: transparent;
         -webkit-text-stroke: 1px white;

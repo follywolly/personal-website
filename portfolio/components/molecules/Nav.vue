@@ -5,7 +5,7 @@
       <ul>
         <li><nuxt-link @click.native="onClick" to="/" data-text="Home">Home</nuxt-link></li>
         <li><nuxt-link @click.native="onClick" to="/about" data-text="Projects">About</nuxt-link></li>
-        <li><nuxt-link @click.native="onClick" to="/contact" data-text="Contact">Contact</span></nuxt-link></li>
+        <li><nuxt-link @click.native="onClick" to="/contact" data-text="Contact">Contact</nuxt-link></li>
       </ul>
     </nav>
     <div class="nav__link-follower" ref="follower">

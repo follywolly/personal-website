@@ -17,7 +17,7 @@
 <script>
   import Header from '~/components/organisms/Header.vue'
   import helpers from '~/components/modules/helpers.js'
-  import config from '~/components/modules/config.js'
+  // import config from '~/components/modules/config.js'
 
   export default {
     components: {
@@ -40,7 +40,6 @@
     mounted() {
       this.cursor = document.querySelector('#cursor')
       this.follower = document.querySelector('#follower')
-
       this.checkIfCursorAllowed()
 
       // if (process.browser) {

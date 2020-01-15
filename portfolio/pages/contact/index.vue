@@ -13,17 +13,18 @@
 
 </template>
 <script>
+import observer from '~/components/modules/observer.js'
 export default {
-  data() {
-    return {
-      geos: [],
-      emojis: {
-        hearth: '❤️',
-        wave: '👋',
-        eye: '👁️'
-      }
-    }
-  },
+  // data() {
+  //   return {
+  //     geos: [],
+  //     emojis: {
+  //       hearth: '❤️',
+  //       wave: '👋',
+  //       eye: '👁️'
+  //     }
+  //   }
+  // },
   computed: {
     email() {
       const symbol = '@'
@@ -32,28 +33,35 @@ export default {
   },
   mounted() {
     if (process.browser) {
-      this.printGeos()
+      // this.printGeos()
+      TweenLite.to(document.querySelector('.contact__title'), 1, {opacity: 1, y: -32, delay: .5})
+      const texts = [...document.querySelectorAll('.contact__link')]
+      texts.forEach((text, i) => {
+        TweenLite.to(text, 1, {opacity: 1, y: -32, delay: 1.25 + .125 * i})
+      })
+      
     }
+    
   },
   methods: {
-    printGeos() {
-      fetch('/geos')
-        .then(res => res.json())
-        .then(geos => {
-          return geos
-            .map(geo => ({
-              ...geo,
-              visited: new Date(geo.visited),
-              emoji: this.emojify(geo.emoji)
-            }))
-        })
-        .then(geos => {
-          this.geos = geos
-        })
-    },
-    emojify(emoji) {
-      return this.emojis[emoji]
-    }
+    // printGeos() {
+    //   fetch('/geos')
+    //     .then(res => res.json())
+    //     .then(geos => {
+    //       return geos
+    //         .map(geo => ({
+    //           ...geo,
+    //           visited: new Date(geo.visited),
+    //           emoji: this.emojify(geo.emoji)
+    //         }))
+    //     })
+    //     .then(geos => {
+    //       this.geos = geos
+    //     })
+    // },
+    // emojify(emoji) {
+    //   return this.emojis[emoji]
+    // }
   }
 }
 </script>
@@ -62,13 +70,16 @@ export default {
     padding-top: 5rem;
     padding-bottom: 5rem;
     @media screen and (min-width: 60rem) {
-      padding-top: 10rem;
+      padding-top: 8rem;
       padding-bottom: 10rem;
     }
     &__title {
       font-weight: 400;
       font-size: 2rem;
       margin-bottom: 2rem;
+      position: relative;
+      top: 2rem;
+      opacity: 0;
       @media screen and (min-width: 40rem) {
         font-size: 2.5rem;
       }
@@ -80,11 +91,15 @@ export default {
       display: block;
       margin-bottom: 1.5rem;
       max-width: 20rem;
+      position: relative;
+      top: 2rem;
+      opacity: 0;
       span {
         display: block;
         font-style: italic;
         font-size: .75rem;
       }
+        
     }
     .geos-holder {
       position: absolute;

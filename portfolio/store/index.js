@@ -17,22 +17,6 @@ export const state = () => ({
       href: 'https://watch.qualitytv.eu'
     },
     {
-      title: 'MAAT. Creative',
-      image: '/images/maat-creative/screenshot_1.png',
-      description: '<p>In the first half of 2019 three friends of mine started a small startup called MAAT. Creative. They were developing an online tool to generate a filter system by letting users choose between two videos.</p><p>After a while they asked me to join the project as their developer.</p>',
-      summary: {
-        content: '<p>We started development of the site and online tool somewhere around march 2019. I build the marketing website in that period, as well as the beginning of a Content Management System for the online tool. It had to be as easy as possible for clients to upload videos and keep track of the choices people would make.</p><p>We\'ve finished a rough version of the Tool and dashboard. We are currently working on tests and interested parties for the tool.</p>',
-        image: '/images/maat-creative/screenshot_1.png',
-      },
-      meta: {
-        client: 'MAAT. Creative',
-        role: 'Developer & Designer',
-        date: '21/04/2019',
-      },
-      technologies: ['Nuxt', 'PHP'],
-      href: 'https://maatcreative.nl'
-    },
-    {
       title: 'Rainforest Alliance',
       image: '/images/rainforest-alliance/screenshot_1.png',
       description: '<p>At the end of 2018 I had the opportunity via my studies to develop a project for Rainforest Alliance.</p><p>I worked in a team of four to create an interactive product that would show people the livelyhood of Ghanian farmers.</p><p>This project has won a <a href="https://www.cmd-amsterdam.nl/gda-2019/" target="_blank">Golden Dot Award</a> for best interactive design.</p>',

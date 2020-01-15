@@ -209,9 +209,9 @@ export default {
       @media screen and (min-width: 40rem) {
         font-size: 5rem;
       }
-      @media screen and (min-width: 60rem) {
-        font-size: 7rem;
-      }
+      // @media screen and (min-width: 60rem) {
+      //   font-size: 7rem;
+      // }
       &-part {
         display: block;
         position: absolute;
@@ -223,7 +223,7 @@ export default {
           top: 45vh;
           left: 1rem;
           @media screen and (min-width: 40rem) {
-            left: 20vw;
+            left: 22vw;
             top: 35vh;
           }
         }
@@ -261,13 +261,13 @@ export default {
       opacity: 0;
       top: 40vh;
       width: 50%;
-      max-width: 17.5rem;
+      max-width: 12.5rem;
       pointer-events: none;
       @media screen and (min-width: 40rem) {
         top: 30vh;
       }
       img {
-        opacity: .5;
+        opacity: .25;
         width: 100%;
       }
     }
