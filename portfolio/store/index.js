@@ -14,7 +14,7 @@ export const state = () => ({
         date: 'Ongoing',
       },
       technologies: ['Nuxt', 'NodeJS', 'MongoDB'],
-      href: 'https://watch.qualitytv.eu'
+      href: 'https://qtv.sr'
     },
     {
       title: 'Rainforest Alliance',
@@ -35,7 +35,7 @@ export const state = () => ({
     {
       title: 'Blue Ivy Amsterdam',
       image: '/images/blue-ivy/screenshot_1.jpg',
-      description: '<p>In december of 2018 the content manager of nightclub Blue Ivy Amsterdam approached me to design and develop their main website.</p><p>After designing a few iterations they ended up choosing a fully blue design.</p><p>The website was developed with Wordpress as a custom theme.</p>',
+      description: '<p>In december of 2018 the content manager of nightclub Blue Ivy Amsterdam approached me to design and develop their main website.</p><p>After designing a few iterations they ended up choosing a fully blue design.</p><p>The website was developed with Wordpress as a custom theme.</p><p>(official site currently offline, current link links to a demo version on a subdomain)</p>',
       summary: {
         content: '<p>One of the interesting parts of the project was that they requested a custom agenda functionality that allowed them to create agenda items which would be automatically removed after their date had passed. This was solved with a simple cron-job.</p><p>Another custom feature they requested was the possibility to have people sign up for an event\'s guestlist. They requested the possibility to generate a spreadsheet per event with the attendees.</p>',
         image: '/images/blue-ivy/blueivy_fullscreen_sm.jpg',
@@ -46,7 +46,7 @@ export const state = () => ({
         date: '21/02/2019',
       },
       technologies: ['PHP'],
-      href: 'https://blueivyamsterdam.com/'
+      href: 'https://blueivy.folkertjan.nl/'
     },
     // {
     //   title: 'Katalysis.io',

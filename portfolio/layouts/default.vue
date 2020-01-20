@@ -252,7 +252,7 @@ body {
   &::-webkit-scrollbar-thumb {
     background-color: var(--color-grey);
     border: 6px solid var(--color-dark);
-    border-top: 32px solid var(--color-dark);
+    // border-top: 32px solid var(--color-dark);
     border-radius: 25px;
   }
 }

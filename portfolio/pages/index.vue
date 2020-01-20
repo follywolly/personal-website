@@ -37,6 +37,11 @@ export default {
       {src: 'https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/plugins/ScrollToPlugin.min.js'}
     ]
   },
+  data() {
+    return {
+      timeout: false
+    }
+  },
   components: {
     Card,
     SplashScreen
@@ -62,8 +67,11 @@ export default {
       return
     }
 
-    TweenLite.to(this.$refs.button, .5, {opacity: 1, delay: 3})
-    TweenLite.to(this.$refs.button_after, .5, {height: 40, delay: 3.5})
+    window.addEventListener('scroll', this.onScroll)
+
+    TweenLite.to(this.$refs.button, .5, {opacity: 1, delay: 3, onComplete: () => {
+      this.$refs.button_after.classList.add('animate')
+    }})
 
     const cardIntersector = observer.generate(this.fadeIn, .25)
     const cards = document.querySelectorAll('.card')
@@ -100,6 +108,19 @@ export default {
 
   },
   methods: {
+    onScroll(e) {
+      if (this.timeout) {
+		    window.cancelAnimationFrame(this.timeout);
+	    }
+
+        // Setup the new requestAnimationFrame()
+      this.timeout = window.requestAnimationFrame(() => {
+        if (window.scrollY < window.innerHeight) {
+          this.$refs.button.style = `opacity: ${1 - (window.scrollY / window.innerHeight * 2.5)};`
+        }
+        
+      })
+    },
     scrollDown() {
       console.log('clickity')
       TweenLite.to(window, 1, {scrollTo: window.innerHeight})
@@ -155,6 +176,9 @@ export default {
       overflow-y: hidden;
     }
     &__scroll-button {
+      &:focus {
+        outline: none;
+      }
       opacity: 0;
       bottom: 1rem;
       z-index: 24;
@@ -177,6 +201,23 @@ export default {
         width: 1px;
         height: 0;
         background-color: var(--color-grey);
+        &.animate {
+          animation: scroll 2s linear infinite;
+          @keyframes scroll {
+            0% {
+              transform: translateY(0);
+              height: 0;
+            }
+            50% {
+              transform: translateY(0);
+              height: 2.5rem;
+            }
+            100% {
+              height: 0;
+              transform: translateY(2.5rem);
+            }
+          }
+        }
       }
     }
   }

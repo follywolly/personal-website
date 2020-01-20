@@ -2,7 +2,7 @@
   <div class="intro-holder" ref="holder">
     <div class="intro" ref="inner">
       <div class="intro__image" ref="image">
-        <img src="images/eye.png" alt="">
+        <img src="images/eye.png" alt="© Thomas F., Centaur Publications. 'The Eye'" title="© Thomas F., Centaur Publications. 'The Eye'">
       </div>
       <h2 class="intro__title">
         <div class="intro__title-fg"><span class="intro__title-part">Folkert</span><span class="intro__title-part">-Jan</span></div>
