@@ -7,7 +7,7 @@
       </div>
     </main>
     <div id="cursor">
-      <div class="cursor__text">view project</div>
+      <div class="cursor__text" aria-hidden="true">view project</div>
     </div>
     <div id="follower">
     </div>
