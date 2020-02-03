@@ -1,6 +1,6 @@
 <template>
   <li class="card" ref="card">
-    <nuxt-link :to="`/projects/${slug}`" class="card__link">
+    <nuxt-link :to="`/projects/${slug}`" class="card__link no-hover">
       <div class="card__image-holder" ref="image">
         <figure class="card__image">
           <img class="card__image--inner" :data-src="project.image" alt="">
@@ -16,7 +16,7 @@
       </div>
       <div class="card__count"><span class="card__count-current">{{modIndex}}</span> / {{total}}</div>
       <div class="card__button">
-        read more
+        {{project.meta.date}}
       </div>
 
     </nuxt-link>
@@ -98,6 +98,7 @@ export default {
     },
     reset() {
       this.mouse.cursor.classList.remove('hover')
+      this.mouse.cursor.classList.remove('hover--project')
       const image = this.$refs.image
       if (image) {
         image.style = `transform: rotateX(0deg) rotateY(0deg); transition: transform 1s`
@@ -109,10 +110,13 @@ export default {
       if (!this.mouse.cursor.classList.contains('hover')) {
         this.mouse.cursor.classList.add('hover')
       }
+      if (!this.mouse.cursor.classList.contains('hover--project')) {
+        this.mouse.cursor.classList.add('hover--project')
+      }
       this.updatePosition(event)
 
-      const x = (this.mouse.y / this.$refs.image.offsetHeight / 2).toFixed(2)
-      const y = (this.mouse.x / this.$refs.image.offsetWidth / 2).toFixed(2)
+      const x = (this.mouse.y / this.$refs.image.offsetHeight / 2)
+      const y = (this.mouse.x / this.$refs.image.offsetWidth / 2)
       const image = this.$refs.image
       if (image) {
         image.style = `transform: rotateX(${x * 30}deg) rotateY(${y * 30}deg);`
@@ -194,12 +198,15 @@ export default {
       transition: transform 0;
       transform-style: preserve-3d;
       position: absolute;
-      left: 10rem;
+      left: 50%;
       z-index: 2;
       background-color: var(--color-dark);
       width: 100%;
       max-width: 30rem;
       box-shadow: 2px 2px 50px rgba(100, 100, 100, 0.2);
+      @media screen and (min-width: 50rem) {
+        left: 12.5rem;
+      }
 
     }
   }

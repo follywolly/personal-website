@@ -200,12 +200,24 @@ export default {
       &-link {
         width: 100%;
         max-width: 7.5rem;
-        position: relative;
-        opacity: 0;
-        display: none;
+        opacity: 1;
         box-shadow: 0px 3px 10px rgba(0,0,0,0.2);
+        display: block;
+        position: absolute;
+        bottom: calc(-50% - 25vh);
+        border-radius: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+        height: 100%;
         @media screen and (min-width: 40rem) {
-          display: block;
+          height: auto;
+          position: relative;
+          top: 0;
+          left: 0;
+          z-index: 0;
+          transform: translate(0,0);
+          opacity: 0;
         }
       }
       &-anchor {

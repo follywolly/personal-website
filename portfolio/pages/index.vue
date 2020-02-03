@@ -70,7 +70,10 @@ export default {
     window.addEventListener('scroll', this.onScroll)
 
     TweenLite.to(this.$refs.button, .5, {opacity: 1, delay: 3, onComplete: () => {
-      this.$refs.button_after.classList.add('animate')
+      if (this.$refs.button_after) {
+        this.$refs.button_after.classList.add('animate')
+      }
+      
     }})
 
     const cardIntersector = observer.generate(this.fadeIn, .25)
@@ -115,7 +118,7 @@ export default {
 
         // Setup the new requestAnimationFrame()
       this.timeout = window.requestAnimationFrame(() => {
-        if (window.scrollY < window.innerHeight) {
+        if (window.scrollY < window.innerHeight && this.$refs.button) {
           this.$refs.button.style = `opacity: ${1 - (window.scrollY / window.innerHeight * 2.5)};`
         }
         

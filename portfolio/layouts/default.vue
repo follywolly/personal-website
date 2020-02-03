@@ -7,6 +7,7 @@
       </div>
     </main>
     <div id="cursor">
+      <div class="cursor__text">view project</div>
     </div>
     <div id="follower">
     </div>
@@ -90,7 +91,8 @@
       },
       initCursor() {
         this.mouse.allowed = true
-        const links = [...document.querySelectorAll('a')]
+        const links = [...document.querySelectorAll('a')].filter(link => !link.classList.contains('no-hover'))
+        // const links = [...document.querySelectorAll('a:not(".no-hover")')]
         const buttons = [...document.querySelectorAll('button')]
         const lights = [...document.querySelectorAll('.mouse-dark')]
         this.hoverables = links.concat(buttons).concat(lights)
@@ -157,6 +159,23 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
 }
+#cursor {
+  &::after {
+    display: block;
+    width: 1px;
+    height: 1px;
+    border: 10px solid transparent;
+    border-left-color: white;
+    border-left-width: 15px;
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0rem;
+    transform: translateY(3rem) rotate(90deg);
+    opacity: 0;
+    transition: opacity .1s, all .6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+}
 #cursor, #follower {
   display: none;
   border-radius: 50%;
@@ -176,21 +195,59 @@ html {
   @media screen and (min-width: 60rem) {
     display: block;
   }
+  .cursor__text {
+    color: white;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -3px;
+    transform: translate(-50%, -50%);
+    // white-space: nowrap;
+    line-height: 1;
+    text-align: center;
+    z-index: 14;
+    pointer-events: none;
+  }
   &.hover {
-    width: 12px;
-    height: 12px;
-    // border-radius: 2px;
-    top: -6px;
-    left: -6px;
-    background: rgba(255,255,255,.8);
-    background: white;
     width: 4rem;
     height: 4rem;
     left: -2rem;
     top: -2rem;
+    -webkit-backdrop-filter: none;
     mix-blend-mode: difference;
-
+    background: white;
+    &.hover--project {
+      width: 5rem;
+      height: 5rem;
+      left: -2.5rem;
+      top: -2.5rem;
+      mix-blend-mode: normal;
+      -webkit-backdrop-filter: blur(5px) brightness(.75) contrast(1.5);
+      background: transparent;
+      border-width: 2px;
+      &::after {
+        opacity: 1;
+        transform: translate(2.5rem, -50%) rotate(0deg);
+        transition: opacity .3s, all .6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        animation: floatPointer .75s infinite alternate ease-in-out;
+        animation-delay: .6s;
+        @keyframes floatPointer {
+          0% {
+            transform: translate(2.5rem, -50%);
+          }
+          100% {
+            transform: translate(2rem, -50%);
+          }
+        }
+      }
+      .cursor__text {
+        opacity: 1;
+      }
+    }
     + #follower {
+      
+      // background-color: #000;
       // border-radius: 5px;
       width: 4rem;
       height: 4rem;
