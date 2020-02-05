@@ -84,4 +84,4 @@ dist
 sw.*
 
 # Added
-config.js
+/components/modules/config.js

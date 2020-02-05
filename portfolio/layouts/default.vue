@@ -5,6 +5,12 @@
       <nuxt class="page"/>
       <div class="page-transitioner">
       </div>
+      <footer class="container">
+        <div class="footer-content">
+          © 2020 - Folkert-Jan van der Pol
+        </div>
+        
+      </footer>
     </main>
     <div id="cursor">
       <div class="cursor__text" aria-hidden="true">view project</div>
@@ -436,5 +442,15 @@ p {
   background-color: var(--color-semi-dark);
   z-index: 9;
   // transition: all .3s;
+}
+.footer-content {
+  opacity: .5;
+  text-transform: lowercase;
+  @media screen and (min-width: 40rem) {
+    padding: 0 0 0 4rem;
+  }
+  @media screen and (min-width: 50rem) {
+    padding: 0 8rem 0rem;
+  }
 }
 </style>

@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import tokens from '@/components/modules/config.js'
 export default {
   data() {
     return {
@@ -75,7 +76,7 @@ export default {
       return fetch(url, {
         method: 'GET',
         headers: {
-          Authorization: `token ${process.env.GITHUB_TOKEN}`,
+          Authorization: `token ${tokens.GITHUB}`,
           Accept: type ? type : 'application/vnd.github.v3+json'
         }
       })
@@ -102,7 +103,7 @@ export default {
             .then(indexes => {
               const filtered = repos
                 .filter((r, i) => indexes.includes(i))
-                console.log(filtered)
+                
               this.repositories = filtered
                 
                 .map(r => ({
@@ -134,14 +135,14 @@ export default {
 }
 .github-container {
   position: relative;
-  padding: 0 0 5rem 1.5rem;
+  padding: 0 0 3rem 1.5rem;
   margin: 0 -1.5rem;
   @media screen and (min-width: 40rem) {
     margin: 0;
-    padding: 0 0 5rem 4rem;
+    padding: 0 0 3rem 4rem;
   }
   @media screen and (min-width: 50rem) {
-    padding: 0 8rem 5rem 8rem;
+    padding: 0 8rem 3rem 8rem;
   }
   &::before, &::after {
     display: none;
@@ -208,7 +209,7 @@ export default {
     display: inline-block;
     white-space: normal;
     margin: 0;
-    margin-right: 1rem;
+    margin-right: 1.5rem;
     &:last-of-type {
       padding-right: 6.5rem;
       @media screen and (min-width: 40rem) {
@@ -217,7 +218,6 @@ export default {
     }
     &-container {
       height: 100%;
-      padding: 1rem;
       border: 1px solid #444;
       border-radius: 5px;
       width: 25rem;
@@ -237,6 +237,7 @@ export default {
       display: flex;
       flex-direction: column;
       height: 100%;
+      padding: 1rem;
     }
     &-title {
       text-transform: capitalize;
