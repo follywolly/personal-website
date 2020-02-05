@@ -173,7 +173,7 @@ html {
     right: 0rem;
     transform: translateY(3rem) rotate(90deg);
     opacity: 0;
-    transition: opacity .1s, all .6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: opacity .1s, transform .6s cubic-bezier(0.165, 0.84, 0.44, 1);
   }
 }
 #cursor, #follower {
@@ -214,7 +214,6 @@ html {
     height: 4rem;
     left: -2rem;
     top: -2rem;
-    -webkit-backdrop-filter: none;
     mix-blend-mode: difference;
     background: white;
     &.hover--project {
@@ -223,14 +222,15 @@ html {
       left: -2.5rem;
       top: -2.5rem;
       mix-blend-mode: normal;
-      -webkit-backdrop-filter: blur(5px) brightness(.75) contrast(1.5);
+      backdrop-filter: blur(2px) brightness(.6) contrast(1.5);
+      -webkit-backdrop-filter: blur(2px) brightness(.6) contrast(1.5);
       background: transparent;
       border-width: 2px;
       &::after {
         opacity: 1;
         transform: translate(2.5rem, -50%) rotate(0deg);
-        transition: opacity .3s, all .6s cubic-bezier(0.165, 0.84, 0.44, 1);
-        animation: floatPointer .75s infinite alternate ease-in-out;
+        transition: opacity .3s, transform .6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        animation: floatPointer .85s infinite alternate ease-in-out;
         animation-delay: .6s;
         @keyframes floatPointer {
           0% {

@@ -130,7 +130,7 @@ export default {
 .card {
   position: relative;
   width: 100%;
-  max-width: 40rem;
+  max-width: 42.5rem;
   min-height: 15rem;
   margin-bottom: 10rem;
   perspective: 1000px;

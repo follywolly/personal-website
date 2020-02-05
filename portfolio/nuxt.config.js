@@ -3,6 +3,9 @@ const pkg = require('./package')
 
 module.exports = {
   mode: 'universal',
+  env: {
+    GITHUB_TOKEN: '801f6b245415e6d288e5f37717f1198ec6b6403a'
+  },
 
   /*
   ** Headers of the page

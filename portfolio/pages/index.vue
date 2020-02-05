@@ -9,7 +9,12 @@
       <ul class="work-holder">
         <Card v-for="(project, i) in projects" :key="project.name" :index="i + 1" :total="projects.length" :project="project" />
       </ul>
+      <GithubList />
+      <MediumList />
     </div>
+    <!-- <div class="container">
+      
+    </div> -->
     <!-- <SplashScreen v-if="showSplash" /> -->
     <!-- <div class="button-section">
       <h2 class="note-button-title">Leave a visitor's note</h2>
@@ -28,6 +33,8 @@
 
 <script>
 import Card from '~/components/atoms/Card.vue'
+import GithubList from '~/components/molecules/GithubList.vue'
+import MediumList from '~/components/molecules/MediumList.vue'
 import SplashScreen from '~/components/organisms/SplashScreen.vue'
 import { TweenLite } from 'gsap'
 import observer from '~/components/modules/observer.js'
@@ -44,7 +51,9 @@ export default {
   },
   components: {
     Card,
-    SplashScreen
+    SplashScreen,
+    GithubList,
+    MediumList
   },
   computed: {
     showSplash() {
@@ -308,15 +317,23 @@ export default {
     }
   }
   .work-holder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     list-style: none;
-    padding: 8rem 0;
+    padding: 8rem 0rem 4rem;
     margin: 0;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     // perspective: 1000px;
+    @media screen and (min-width: 40rem) {
+      padding: 8rem 4rem 4rem;
+    }
+    @media screen and (min-width: 50rem) {
+      padding: 8rem 8rem 4rem;
+    }
     .card {
+      &:nth-of-type(even) {
+        margin-left: auto;
+      }
       &.observable {
         position: relative;
         top: 4rem;
