@@ -18,6 +18,9 @@
     </div>
     <div id="follower">
     </div>
+    <div id="scrollbar">
+      <div id="scrollbar--inner"></div>
+    </div>
   </div>
 
 </template>
@@ -101,8 +104,9 @@
         this.mouse.allowed = false
         this.cursor.classList.remove('hover')
         this.cursor.classList.remove('dark')
+        this.cursor.classList.remove('hover--project')
+        this.cursor.classList.remove('above-fold')
         window.removeEventListener('mouseleave', this.onMouseLeave)
-        window.removeEventListener('mouseout', this.onMouseLeave)
         window.removeEventListener('mousemove', this.onMouseMove)
         this.hoverables.forEach(hoverable => {
           hoverable.removeEventListener('mouseenter', this.onHoverableMouseEnter)
@@ -116,7 +120,6 @@
         const lights = [...document.querySelectorAll('.mouse-dark')]
         this.hoverables = links.concat(buttons).concat(lights)
         window.addEventListener('mouseleave', this.onMouseLeave)
-        window.addEventListener('mouseout', this.onMouseLeave)
         window.addEventListener('mousemove', this.onMouseMove)
         this.hoverables.forEach(hoverable => {
           hoverable.addEventListener('mouseenter', this.onHoverableMouseEnter)
@@ -180,6 +183,7 @@ html {
   box-sizing: border-box;
 }
 #cursor {
+  position: fixed;
   &::after {
     display: block;
     width: 1px;
@@ -238,7 +242,7 @@ html {
     &::after {
       opacity: 1;
       transform: translate(-50%, 1.75rem) rotate(90deg);
-      animation: floatPointerVertical .85s infinite alternate ease-in-out;
+      // animation: floatPointerVertical .85s infinite alternate ease-in-out;
         // animation-delay: .6s;
       @keyframes floatPointerVertical {
         0% {
@@ -373,6 +377,9 @@ body {
   }
   @media screen and (min-width: 60rem) {
     cursor: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 main {

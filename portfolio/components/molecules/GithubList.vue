@@ -94,8 +94,7 @@ export default {
       const index = this.observables.findIndex(node => node === entry.target)
       const factor = window.innerWidth < 50 * 16 ? .3 : (.2 * ((index < 2 ? index : 0) + 1))
       const timing = window.innerWidth < 50 * 16 ? .5 : .75
-      const opacity = window.innerWidth < 50 * 16 ? 1 : .8
-      TweenLite.to(entry.target, timing, {delay: factor, y: -48, opacity})
+      TweenLite.to(entry.target, timing, {delay: factor, y: -48, opacity: 1})
     },
     setListeners() {
       const items = document.querySelectorAll('.github-list__item')
