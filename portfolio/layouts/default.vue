@@ -5,7 +5,7 @@
       <nuxt class="page"/>
       <div class="page-transitioner">
       </div>
-      <footer class="container">
+      <footer class="container footer">
         <div class="footer-content">
           © 2020 - Folkert-Jan van der Pol
         </div>
@@ -443,14 +443,17 @@ p {
   z-index: 9;
   // transition: all .3s;
 }
-.footer-content {
-  opacity: .5;
-  text-transform: lowercase;
-  @media screen and (min-width: 40rem) {
-    padding: 0 0 0 4rem;
-  }
-  @media screen and (min-width: 50rem) {
-    padding: 0 8rem 0rem;
+.footer {
+  padding-bottom: 2rem;
+  &-content {
+    opacity: .5;
+    text-transform: lowercase;
+    @media screen and (min-width: 40rem) {
+      padding: 0 0 0 4rem;
+    }
+    @media screen and (min-width: 50rem) {
+      padding: 0 8rem 0;
+    }
   }
 }
 </style>

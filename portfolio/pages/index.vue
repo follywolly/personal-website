@@ -12,22 +12,6 @@
       <GithubList />
       <MediumList />
     </div>
-    <!-- <div class="container">
-      
-    </div> -->
-    <!-- <SplashScreen v-if="showSplash" /> -->
-    <!-- <div class="button-section">
-      <h2 class="note-button-title">Leave a visitor's note</h2>
-      <div class="button-holder">
-        <button class="note-button hoverable" @click="e => postNote(e, 'hearth')"><span data-content="❤️" aria-label="Love">❤️</span></button>
-        <button class="note-button hoverable" @click="e => postNote(e, 'wave')"><span data-content="👋" aria-label="Wave">👋</span></button>
-        <button class="note-button hoverable" @click="e => postNote(e, 'eye')"><span data-content="👁️" aria-label="Eye see you">👁️</span></button>
-      </div>
-      <span class="note-button-conditions text-small text-center">* this action will save the city you are currently visiting the site from</span>
-      <div id="input">
-
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -137,38 +121,13 @@ export default {
       console.log('clickity')
       TweenLite.to(window, 1, {scrollTo: window.innerHeight})
     },
-    postNote(e, emoji) {
-      this.animateClick(e.target)
-      const body = JSON.stringify({emoji})
-      fetch('/note', {
-        method: 'POST',
-        body,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(() => {
-        console.log('send');
-      })
-      .catch(e => {
-        console.log(e);
-      })
-    },
-    animateClick(target) {
-      target.classList.add('clicked')
-      const remove = function() {
-        target.classList.remove('clicked')
-        target.removeEventListener('transitionend', this)
-      }
-      target.addEventListener('transitionend', remove)
-    },
     fadeIn(entry) {
       const img = entry.target.querySelector('.card__image--inner')
       if (!img.src) img.src = img.dataset.src
       TweenLite.to(entry.target, 1, {delay: .3, y: -64, opacity: 1})
     },
     fadeInButtons(entry) {
-      TweenLite.to(entry.target, 1, {delay: .6, y: -48, opacity: 1})
+      TweenLite.to(entry.target, 1, {delay: .3, y: -48, opacity: 1})
     },
     fadeInTitle(entry) {
       TweenLite.to(entry.target, 1, {delay: .3, y: -48, opacity: 1})

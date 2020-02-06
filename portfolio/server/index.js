@@ -2,12 +2,6 @@ const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
-// const save = require('./save.js')
-// const get = require('./get.js')
-// const post = require('./post.js')
-// const mongoose = require('mongoose')
-// const bodyParser = require('body-parser')
-// require('dotenv').config()
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -26,10 +20,6 @@ async function start() {
   } else {
     await nuxt.ready()
   }
-  // app.use(bodyParser.json())
-  // app.get('/', save.ip)
-  // app.get('/geos', get.geos)
-  // app.post('/note', post.note)
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
@@ -40,14 +30,5 @@ async function start() {
     badge: true
   })
 }
-// const database = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@portfolio-0itkc.mongodb.net/portfolio?retryWrites=true&w=majority`
-// mongoose
-//   .connect(database, {useNewUrlParser: true})
-//   .then(() => {
-//     start()
-//   })
-//   .catch(e => {
-//     throw e
-//   })
 
 start()
