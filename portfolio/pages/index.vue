@@ -48,9 +48,23 @@ export default {
     }
   },
   mounted() {
-    if (!process.browser && !observer.exists) {
+    if (!process.browser) {
       return
     }
+    const cursor = document.querySelector('#cursor')
+    const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
+    if (scrollTop === 0) {
+      setTimeout(() => {
+        if (scrollTop < 100) cursor.classList.add('above-fold')
+      }, 4000)
+      window.addEventListener('scroll', e => {
+        const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
+        if (scrollTop > 100) {
+          cursor.classList.remove('above-fold')
+        }
+      })
+    }
+
     if (process.browser && !observer.exists) {
       const cards = document.querySelectorAll('.card')
       cards.forEach(card => {
@@ -163,6 +177,9 @@ export default {
       font: inherit;
       background: none;
       border: none;
+      @media screen and (min-width: 60rem) {
+        display: none;
+      }
       &--after {
         position: absolute;
         top: 3rem;
@@ -277,17 +294,17 @@ export default {
   }
   .work-holder {
     list-style: none;
-    padding: 8rem 0rem 4rem;
+    padding: 4rem 0;
     margin: 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     // perspective: 1000px;
     @media screen and (min-width: 40rem) {
-      padding: 8rem 4rem 4rem;
+      padding: 4rem;
     }
     @media screen and (min-width: 50rem) {
-      padding: 8rem 8rem 4rem;
+      padding: 4rem 8rem;
     }
     .card {
       &:nth-of-type(even) {

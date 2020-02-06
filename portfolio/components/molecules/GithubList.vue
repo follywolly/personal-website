@@ -94,7 +94,8 @@ export default {
       const index = this.observables.findIndex(node => node === entry.target)
       const factor = window.innerWidth < 50 * 16 ? .3 : (.2 * ((index < 2 ? index : 0) + 1))
       const timing = window.innerWidth < 50 * 16 ? .5 : .75
-      TweenLite.to(entry.target, timing, {delay: factor, y: -48, opacity: .8})
+      const opacity = window.innerWidth < 50 * 16 ? 1 : .8
+      TweenLite.to(entry.target, timing, {delay: factor, y: -48, opacity})
     },
     setListeners() {
       const items = document.querySelectorAll('.github-list__item')
@@ -270,11 +271,14 @@ export default {
     display: inline-block;
     white-space: normal;
     margin: 0;
-    margin-right: 1.5rem;
+    margin-right: .5rem;
     &.observable {
       position: relative;
       top: 3rem;
       opacity: 0;
+    }
+    @media screen and (min-width: 40rem) {
+      margin-right: 1.5rem;
     }
     &:last-of-type {
       padding-right: 6.5rem;
@@ -290,7 +294,7 @@ export default {
       flex-direction: column;
       height: 100%;
       padding: 1rem;
-      opacity: .8;
+      opacity: 1;
       height: 100%;
       border: 1px solid #444;
       border-radius: 5px;
@@ -299,6 +303,7 @@ export default {
       box-shadow: 2px 2px 50px rgba(100, 100, 100, 0.15);
       transition: opacity .5s, transform .75s cubic-bezier(0.165, 0.84, 0.44, 1);
       @media screen and (min-width: 50rem) {
+        opacity: .8;
         &:hover {
           transform: translateY(-1rem);
           opacity: 1;

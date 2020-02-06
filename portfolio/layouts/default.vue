@@ -13,7 +13,8 @@
       </footer>
     </main>
     <div id="cursor">
-      <div class="cursor__text" aria-hidden="true">view project</div>
+      <div class="cursor__text cursor__text--project" aria-hidden="true">view project</div>
+      <div class="cursor__text cursor__text--scroll" aria-hidden="true">scroll down for work</div>
     </div>
     <div id="follower">
     </div>
@@ -49,6 +50,18 @@
       this.follower = document.querySelector('#follower')
       this.checkIfCursorAllowed()
 
+      const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
+      if (scrollTop === 0) {
+        setTimeout(() => {
+          if (scrollTop < 100) this.cursor.classList.add('above-fold')
+        }, 4000)
+        window.addEventListener('scroll', e => {
+          const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
+          if (scrollTop > 100) {
+            this.cursor.classList.remove('above-fold')
+          }
+        })
+      }
       // if (process.browser) {
       //   fetch(config.api.url + 'posts')
       //     .then(res => res.json())
@@ -76,10 +89,10 @@
     },
     methods: {
       checkIfCursorAllowed() {
-        if (process.browser && helpers.getWindowSize().width > 1024 && !this.mouse.allowed) {
+        if (process.browser && helpers.getWindowSize().width >= 60 * 16 && !this.mouse.allowed) {
           this.initCursor()
         }
-        if (process.browser && helpers.getWindowSize().width < 1024 && this.mouse.allowed) {
+        if (process.browser && helpers.getWindowSize().width < 60 * 16 && this.mouse.allowed) {
           this.resetCursor()
         }
         window.addEventListener('resize', this.checkIfCursorAllowed)
@@ -89,6 +102,7 @@
         this.cursor.classList.remove('hover')
         this.cursor.classList.remove('dark')
         window.removeEventListener('mouseleave', this.onMouseLeave)
+        window.removeEventListener('mouseout', this.onMouseLeave)
         window.removeEventListener('mousemove', this.onMouseMove)
         this.hoverables.forEach(hoverable => {
           hoverable.removeEventListener('mouseenter', this.onHoverableMouseEnter)
@@ -98,11 +112,11 @@
       initCursor() {
         this.mouse.allowed = true
         const links = [...document.querySelectorAll('a')].filter(link => !link.classList.contains('no-hover'))
-        // const links = [...document.querySelectorAll('a:not(".no-hover")')]
         const buttons = [...document.querySelectorAll('button')]
         const lights = [...document.querySelectorAll('.mouse-dark')]
         this.hoverables = links.concat(buttons).concat(lights)
         window.addEventListener('mouseleave', this.onMouseLeave)
+        window.addEventListener('mouseout', this.onMouseLeave)
         window.addEventListener('mousemove', this.onMouseMove)
         this.hoverables.forEach(hoverable => {
           hoverable.addEventListener('mouseenter', this.onHoverableMouseEnter)
@@ -130,7 +144,7 @@
         }
       },
       onMouseLeave() {
-        console.log('fired');
+        console.log('MOUSE LEFT DOC');
         TweenLite.to(this.cursor, .3, {opacity: 0})
         TweenLite.to(this.follower, .5, {opacity: 0})
       },
@@ -176,8 +190,8 @@ html {
     content: "";
     position: absolute;
     top: 50%;
-    right: 0rem;
-    transform: translateY(3rem) rotate(90deg);
+    left: 50%;
+    transform: translate(-50%, 3rem) rotate(90deg);
     opacity: 0;
     transition: opacity .1s, transform .6s cubic-bezier(0.165, 0.84, 0.44, 1);
   }
@@ -197,7 +211,6 @@ html {
   pointer-events: none;
   z-index: 12;
   opacity: 0;
-  cursor: none;
   @media screen and (min-width: 60rem) {
     display: block;
   }
@@ -209,19 +222,60 @@ html {
     left: 50%;
     margin-top: -3px;
     transform: translate(-50%, -50%);
-    // white-space: nowrap;
     line-height: 1;
     text-align: center;
     z-index: 14;
     pointer-events: none;
+    &--scroll {
+      width: 5rem;
+      transition: all .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+  }
+  &.above-fold {
+    background: transparent;
+    border-color: transparent;
+    mix-blend-mode: difference;
+    &::after {
+      opacity: 1;
+      transform: translate(-50%, 1.75rem) rotate(90deg);
+      animation: floatPointerVertical .85s infinite alternate ease-in-out;
+        // animation-delay: .6s;
+      @keyframes floatPointerVertical {
+        0% {
+          transform: translate(-50%, 1.75rem) rotate(90deg);
+        }
+        100% {
+          transform: translate(-50%, 2.25rem) rotate(90deg);
+        }
+      }
+    }
+    &.hover {
+      border-color: white;
+      &::after {
+        opacity: 0;
+      }
+    }
+    .cursor__text--scroll {
+      opacity: 1;
+    }
+    &+#follower {
+      width: 8rem;
+      height: 8rem;
+      left: -4rem;
+      top: -4rem;
+    }
+    
   }
   &.hover {
-    width: 4rem;
-    height: 4rem;
-    left: -2rem;
-    top: -2rem;
+    width: 5rem;
+    height: 5rem;
+    left: -2.5rem;
+    top: -2.5rem;
     mix-blend-mode: difference;
     background: white;
+    .cursor__text {
+      opacity: 0;
+    }
     &.hover--project {
       width: 5rem;
       height: 5rem;
@@ -234,20 +288,20 @@ html {
       border-width: 2px;
       &::after {
         opacity: 1;
-        transform: translate(2.5rem, -50%) rotate(0deg);
+        transform: translate(3.5rem, -50%) rotate(0deg);
         transition: opacity .3s, transform .6s cubic-bezier(0.165, 0.84, 0.44, 1);
         animation: floatPointer .85s infinite alternate ease-in-out;
         animation-delay: .6s;
         @keyframes floatPointer {
           0% {
-            transform: translate(2.5rem, -50%);
+            transform: translate(3.5rem, -50%);
           }
           100% {
-            transform: translate(2rem, -50%);
+            transform: translate(3rem, -50%);
           }
         }
       }
-      .cursor__text {
+      .cursor__text--project {
         opacity: 1;
       }
     }
@@ -255,10 +309,10 @@ html {
       
       // background-color: #000;
       // border-radius: 5px;
-      width: 4rem;
-      height: 4rem;
-      top: -2rem;
-      left: -2rem;
+      width: 5rem;
+      height: 5rem;
+      left: -2.5rem;
+      top: -2.5rem;
       opacity: 0;
       border-color: transparent;
       transition: transform 0s, all .3s;
@@ -304,7 +358,6 @@ body {
   color: var(--color-semi-light);
   font-family: var(--font-main);
   font-weight: normal;
-  cursor: none;
   min-height: 100vh;
   &::-webkit-scrollbar {
     width: 16px;
@@ -317,6 +370,9 @@ body {
     border: 6px solid var(--color-dark);
     // border-top: 32px solid var(--color-dark);
     border-radius: 25px;
+  }
+  @media screen and (min-width: 60rem) {
+    cursor: none;
   }
 }
 main {
@@ -337,13 +393,12 @@ h1,h2,h3,h4,h5,h6 {
   // min-height: 100vh;
 }
 a {
-  cursor: none;
   color: inherit;
   text-decoration: none;
   transition: color .3s;
-  // &:visited {
-  //   color: inherit;
-  // }
+  @media screen and (min-width: 60rem) {
+    cursor: none;
+  }
   &:hover {
     color: white;
   }
@@ -388,7 +443,9 @@ a {
   }
 }
 button {
-  cursor: none;
+  @media screen and (min-width: 60rem) {
+    cursor: none;
+  }
 }
 p {
   text-transform: lowercase;
