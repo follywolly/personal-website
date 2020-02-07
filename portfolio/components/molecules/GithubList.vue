@@ -98,7 +98,7 @@ export default {
     },
     setListeners() {
       const items = document.querySelectorAll('.github-list__item')
-      const cursor = document.querySelector('#cursor')
+      const cursor = document.querySelector('.cursor-pointer')
 
       items.forEach(item => {
         item.addEventListener('mouseenter', () => {
@@ -114,7 +114,8 @@ export default {
       if (!observer.exists) {
         return
       }
-      const itemIntersector = observer.generate(this.fadeInItems, .25)
+      const factor = window.innerWidth < 50 * 16 ? .1 : .25
+      const itemIntersector = observer.generate(this.fadeInItems, factor)
 
       this.observables = [...items]
 

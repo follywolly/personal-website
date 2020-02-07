@@ -12,10 +12,10 @@
         
       </footer>
     </main>
-    <div id="cursor">
+    <div class="cursor cursor-pointer"></div>
+    <div class="cursor cursor-content">
       <div class="cursor__text cursor__text--project" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="icon"><path class="icon__path" d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
-        <span>view project</span>
       </div>
       <div class="cursor__text cursor__text--scroll" aria-hidden="true">
         <svg height="360" width="360" viewBox="-180 -180 360 360" xmlns:xlink="http://www.w3.org/1999/xlink" class="circle">
@@ -27,8 +27,8 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="icon"><path class="icon__path" d="M19 6.41L8.7 16.71a1 1 0 1 1-1.4-1.42L17.58 5H14a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0V6.41zM17 14a1 1 0 0 1 2 0v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2h5a1 1 0 0 1 0 2H5v12h12v-5z"/></svg>
       </div>
     </div>
-    <div id="follower">
-    </div>
+    <div class="cursor cursor-follower"></div>
+    
   </div>
 
 </template>
@@ -50,37 +50,21 @@
           allowed: false
         },
         counter: 0,
-        cursor: null,
+        cursor: {
+          pointer: null,
+          content: null,
+          follower: null
+        },
         follower: null,
         hoverables: []
       }
 
     },
     mounted() {
-      this.cursor = document.querySelector('#cursor')
-      this.follower = document.querySelector('#follower')
+      this.cursor.pointer = document.querySelector('.cursor-pointer')
+      this.cursor.content = document.querySelector('.cursor-content')
+      this.cursor.follower = document.querySelector('.cursor-follower')
       this.checkIfCursorAllowed()
-
-      const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
-      if (scrollTop === 0) {
-        setTimeout(() => {
-          if (scrollTop < 100) this.cursor.classList.add('above-fold')
-        }, 4000)
-        window.addEventListener('scroll', e => {
-          const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
-          if (scrollTop > 100) {
-            this.cursor.classList.remove('above-fold')
-          }
-        })
-      }
-      // if (process.browser) {
-      //   fetch(config.api.url + 'posts')
-      //     .then(res => res.json())
-      //     .then(posts => {
-      //       const projects = posts.map(post => post.acf)
-      //       this.$store.commit('setProjects', projects)
-      //     })
-      // }
     },
     watch: {
       $route(to, from) {
@@ -110,10 +94,9 @@
       },
       resetCursor() {
         this.mouse.allowed = false
-        this.cursor.classList.remove('hover')
-        this.cursor.classList.remove('dark')
-        this.cursor.classList.remove('hover--project')
-        this.cursor.classList.remove('above-fold')
+        this.cursor.pointer.classList.remove('hover')
+        this.cursor.pointer.classList.remove('hover--project')
+        this.cursor.pointer.classList.remove('above-fold')
         window.removeEventListener('mouseleave', this.onMouseLeave)
         window.removeEventListener('mousemove', this.onMouseMove)
         this.hoverables.forEach(hoverable => {
@@ -125,8 +108,7 @@
         this.mouse.allowed = true
         const links = [...document.querySelectorAll('a')].filter(link => !link.classList.contains('no-hover'))
         const buttons = [...document.querySelectorAll('button')]
-        const lights = [...document.querySelectorAll('.mouse-dark')]
-        this.hoverables = links.concat(buttons).concat(lights)
+        this.hoverables = links.concat(buttons)
         window.addEventListener('mouseleave', this.onMouseLeave)
         window.addEventListener('mousemove', this.onMouseMove)
         this.hoverables.forEach(hoverable => {
@@ -139,40 +121,22 @@
           this.x = e.clientX
           this.y = e.clientY
 
-          TweenLite.to(this.cursor, 0, {x: this.x, y: this.y, opacity: 1})
-          TweenLite.to(this.follower, .1, {x: this.x, y: this.y, opacity: .5})
-
-          // if (this.cursor.classList.contains('hover')) {
-          //   // TweenLite.to(this.cursor, .3, {rotation: 45})
-          //   // TweenLite.to(this.follower, .3, {rotation: -225})
-          //   TweenLite.to(this.follower, 0, {x: this.x, y: this.y, opacity: .5})
-          // } else {
-          //   // TweenLite.to(this.cursor, .3, {rotation: 0})
-          //   // TweenLite.to(this.follower, .3, {rotation: 0})
-          //   TweenLite.to(this.follower, .1, {x: this.x, y: this.y, opacity: .5})
-          // }
-
+          TweenLite.to(this.cursor.pointer, 0, {x: this.x, y: this.y, opacity: 1})
+          TweenLite.to(this.cursor.content, 0, {x: this.x, y: this.y, opacity: 1})
+          TweenLite.to(this.cursor.follower, .1, {x: this.x, y: this.y, opacity: .5})
         }
       },
       onMouseLeave() {
-        TweenLite.to(this.cursor, .3, {opacity: 0})
-        TweenLite.to(this.follower, .5, {opacity: 0})
+        TweenLite.to(this.cursor.pointer, .3, {opacity: 0})
+        TweenLite.to(this.cursor.content, .3, {opacity: 0})
+        TweenLite.to(this.cursor.follower, .5, {opacity: 0})
       },
       onHoverableMouseEnter(e) {
-        if (e.target.classList.contains('mouse-dark')) {
-          this.cursor.classList.add('dark')
-        } else {
-          this.cursor.classList.add('hover')
-
-        }
+        this.cursor.pointer.classList.add('hover')
       },
       onHoverableMouseLeave(e) {
-        if (e.target.classList.contains('mouse-dark')) {
-          this.cursor.classList.remove('dark')
-        } else {
-          this.cursor.classList.remove('hover')
-          TweenLite.to(this.follower, .1, {x: this.x, y: this.y, opacity: .5})
-        }
+        this.cursor.pointer.classList.remove('hover')
+        TweenLite.to(this.cursor.follower, .1, {x: this.x, y: this.y, opacity: .5})
       }
     }
   }
@@ -189,210 +153,151 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
 }
-#cursor {
-  position: fixed;
-  &::after {
-    display: block;
-    width: 1px;
-    height: 1px;
-    border: 10px solid transparent;
-    border-left-color: white;
-    border-left-width: 15px;
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 3rem) rotate(90deg);
-    opacity: 0;
-    transition: opacity .1s, transform .6s cubic-bezier(0.165, 0.84, 0.44, 1);
-  }
-}
-#cursor, #follower {
+.cursor {
   display: none;
-  border-radius: 50%;
-  width: 6px;
-  height: 6px;
-  border: 1px solid white; /*var(--color-light)*/
-  content: "";
   position: fixed;
-  top: -3px;
-  left: -3px;
-  background: white; /*var(--color-light);*/
-  transition: all .6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0s;
   pointer-events: none;
   z-index: 12;
   opacity: 0;
   @media screen and (min-width: 60rem) {
     display: block;
   }
-  .cursor__text {
-    color: var(--color-dark);
-    opacity: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -3px;
-    transform: translate(-50%, -50%);
-    line-height: 1;
-    text-align: center;
-    z-index: 14;
-    pointer-events: none;
-    transition: all .2s cubic-bezier(0.165, 0.84, 0.44, 1);
-    &--scroll {
-      .circle {
-        opacity: 0;
-        overflow: visible;
-        width: 18rem;
-        height: 18rem;
-        position: relative;
-        top: .25rem;
-        transition: opacity 1s cubic-bezier(0.165, 0.84, 0.44, 1);
-        &__text {
-          text-transform: uppercase;
-          font-size: .85rem;
+  &-pointer, &-content, &-follower {
+    transition: all .6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0s;
+    position: fixed;
+  }
+  &-pointer {
+    content: "";
+    border-radius: 50%;
+    width: 6px;
+    height: 6px;
+    top: -3px;
+    left: -3px;
+    mix-blend-mode: difference;
+    background: red;
+    background: #E53E3E;
+  }
+  &-content {
+    width: 5rem;
+    height: 5rem;
+    top: -2.5rem;
+    left: -2.5rem;
+    .cursor__text {
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      pointer-events: none;
+      transition: all .2s cubic-bezier(0.165, 0.84, 0.44, 1);
+      &--scroll {
+        .circle {
+          opacity: 0;
+          overflow: visible;
+          width: 18rem;
+          height: 18rem;
+          position: relative;
+          top: .15rem;
+          transition: opacity 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+          &__text {
+            text-transform: uppercase;
+            font-size: .85rem;
+            fill: var(--color-light);
+          }
+        }
+      }
+      &--external {
+        margin-top: 0;
+      }
+      .icon {
+        margin-left: auto;
+        margin-right: auto;
+        &__path {
           fill: var(--color-light);
         }
       }
-    }
-    .icon {
-      margin-left: auto;
-      margin-right: auto;
-      &__path {
-        fill: var(--color-dark);
+      span {
+        display: block;
       }
     }
-    span {
-      display: block;
-    }
-    &--external {
-      margin-top: 0;
-      // .icon {
-      //   &__path {
-          
-      //     fill: var(--color-dark);
-      //   }
-      // }
-    }
+  }
+  &-follower {
+    content: "";
+    position: fixed;
+    border: 1px solid var(--color-semi-light);
+    // background: blue;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: -.75rem;
+    left: -.75rem;
+    transition: transform .1s, all .6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    z-index: 11;
+    border-radius: 50%;
   }
   &.above-fold {
-    mix-blend-mode: difference;
-    // &::after {
-    //   opacity: 1;
-    //   transform: translate(-50%, 1.75rem) rotate(90deg);
-    //   // animation: floatPointerVertical .85s infinite alternate ease-in-out;
-    //     // animation-delay: .6s;
-    //   @keyframes floatPointerVertical {
-    //     0% {
-    //       transform: translate(-50%, 1.75rem) rotate(90deg);
-    //     }
-    //     100% {
-    //       transform: translate(-50%, 2.25rem) rotate(90deg);
-    //     }
-    //   }
-    // }
-    &.hover {
-      border-color: white;
-      &::after {
-        opacity: 0;
-      }
-    }
-    .cursor__text--scroll {
-      opacity: 1;
-      .circle {
-        opacity: 1;
-        // animation: rotate 10s infinite linear;
-        // @keyframes rotate {
-        //   0% {
-        //     transform: rotate(0deg);
-        //   }
-        //   100% {
-        //     transform: rotate(360deg);
-        //   }
-        // }
-      }
-    }
-    &+#follower {
-      width: 8rem;
-      height: 8rem;
-      left: -4rem;
-      top: -4rem;
-    }
-    
-  }
-  &.hover {
-    width: 5rem;
-    height: 5rem;
-    left: -2.5rem;
-    top: -2.5rem;
-    background: white;
-    mix-blend-mode: difference;
-    .cursor__text {
-      opacity: 0;
-    }
-    &.hover--external {
-      mix-blend-mode: normal;
-      .cursor__text--external {
-        opacity: 1;
-        transition: all .6s cubic-bezier(0.165, 0.84, 0.44, 1);
-      }
-    }
-    &.hover--project {
-      mix-blend-mode: normal;
-      width: 6rem;
-      height: 6rem;
-      left: -3rem;
-      top: -3rem;
-      // border-width: 2px;
-      &::after {
-        opacity: 1;
-        transform: translate(4rem, -50%) rotate(0deg);
-        transition: opacity .3s, transform .6s cubic-bezier(0.165, 0.84, 0.44, 1);
-        animation: floatPointer .85s infinite alternate ease-in-out;
-        animation-delay: .6s;
-        @keyframes floatPointer {
-          0% {
-            transform: translate(4rem, -50%);
-          }
-          100% {
-            transform: translate(3.5rem, -50%);
+    &~.cursor { 
+      &-content  {
+        .cursor__text--scroll {
+          opacity: 1;
+          .circle {
+            opacity: 1;
           }
         }
       }
-      .cursor__text--project {
-        opacity: 1;
-        transition: all .6s cubic-bezier(0.165, 0.84, 0.44, 1);
+      &-follower {
+        width: 8rem;
+        height: 8rem;
+        left: -4rem;
+        top: -4rem;
       }
     }
-    + #follower {
-      
-      // background-color: #000;
-      // border-radius: 5px;
+  }
+  &.hover {
+    &.cursor-pointer {
       width: 5rem;
       height: 5rem;
       left: -2.5rem;
       top: -2.5rem;
-      opacity: 0;
-      border-color: transparent;
-      transition: transform 0s, all .3s;
+    }
+    &~.cursor {
+      &-content {
+        .cursor__text--scroll {
+          opacity: 0;
+        }
+      }
+      &-follower {
+        width: 5rem;
+        height: 5rem;
+        left: -2.5rem;
+        top: -2.5rem;
+        opacity: 0;
+        border-color: transparent;
+        transition: transform 0s, all .3s;
+      }
+    }
+    &.hover--external {
+      &~.cursor {
+        &-content {
+          .cursor__text--external {
+            opacity: 1;
+            transition: all .6s cubic-bezier(0.165, 0.84, 0.44, 1);
+          }
+        }
+      }
+      
+    }
+    &.hover--project {
+      &~.cursor {
+        &-content {
+          .cursor__text--project {
+            opacity: 1;
+            transition: all .6s cubic-bezier(0.165, 0.84, 0.44, 1);
+          }
+        }
+      }
     }
   }
-  &.dark {
-    border-color: var(--color-dark);
-    background: var(--color-dark);
-    &+ #follower {
-      border-color: var(--color-dark);
-    }
-  }
-}
-#follower {
-  border-width: 1px;
-  width: 24px;
-  height: 24px;
-  top: -12px;
-  left: -12px;
-  transition: transform .1s, all .3s;
-  background: transparent;
-  z-index: 11;
 }
 
 *,

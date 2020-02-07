@@ -57,17 +57,28 @@ export default {
     if (!process.browser) {
       return
     }
-    const cursor = document.querySelector('#cursor')
-    const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
-    this.cursor_scroll_treshold = window.innerHeight / 4 * 3
-    if (scrollTop < this.cursor_scroll_treshold) {
-      setTimeout(() => {
-        if (scrollTop < this.cursor_scroll_treshold) {
-          cursor.classList.add('above-fold')
-          window.addEventListener('scroll', this.cursorOnScroll)
+    if (window.innerWidth < 60 * 16) {
+      window.addEventListener('scroll', this.onScroll)
+
+      TweenLite.to(this.$refs.button, .5, {opacity: 1, delay: 3, onComplete: () => {
+        if (this.$refs.button_after) {
+          this.$refs.button_after.classList.add('animate')
         }
-      }, 4000)
+      }})
+    } else {
+      const cursor = document.querySelector('.cursor-pointer')
+      const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
+      this.cursor_scroll_treshold = window.innerHeight / 4 * 3
+      if (scrollTop < this.cursor_scroll_treshold) {
+        setTimeout(() => {
+          if (scrollTop < this.cursor_scroll_treshold) {
+            cursor.classList.add('above-fold')
+            window.addEventListener('scroll', this.cursorOnScroll)
+          }
+        }, 4000)
+      }
     }
+    
 
     if (process.browser && !observer.exists) {
       const cards = document.querySelectorAll('.card')
@@ -77,15 +88,6 @@ export default {
       })
       return
     }
-
-    window.addEventListener('scroll', this.onScroll)
-
-    TweenLite.to(this.$refs.button, .5, {opacity: 1, delay: 3, onComplete: () => {
-      if (this.$refs.button_after) {
-        this.$refs.button_after.classList.add('animate')
-      }
-      
-    }})
 
     const cardIntersector = observer.generate(this.fadeIn, .25)
     const cards = document.querySelectorAll('.card')
@@ -124,14 +126,11 @@ export default {
   methods: {
     cursorOnScroll(){
       if (this.allowUpdate) {
-        const cursor = document.querySelector('#cursor')
-        if (!cursor.classList.contains('above-fold')) cursor.classList.add('above-fold')
-        console.log('FIRED', cursor)
-        const scrollText = document.querySelector('#cursor .circle')
+        const cursor = document.querySelector('.cursor-pointer')
+        const scrollText = document.querySelector('.cursor-content .circle')
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
         TweenLite.to(scrollText, .1, {rotation: Math.round(scrollTop / 5)})
         if (scrollTop > this.cursor_scroll_treshold) {
-          console.log('STOPPED', scrollTop, this.cursor_scroll_treshold)
           window.removeEventListener('scroll', this.cursorOnScroll)
           cursor.classList.remove('above-fold')
         }
@@ -152,7 +151,6 @@ export default {
       })
     },
     scrollDown() {
-      console.log('clickity')
       TweenLite.to(window, 1, {scrollTo: window.innerHeight})
     },
     fadeIn(entry) {

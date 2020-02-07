@@ -76,7 +76,7 @@ export default {
     },
     setListeners() {
       const items = document.querySelectorAll('.medium-list__item')
-      const cursor = document.querySelector('#cursor')
+      const cursor = document.querySelector('.cursor-pointer')
       items.forEach(item => {
         item.addEventListener('mouseenter', () => {
           cursor.classList.add('hover')

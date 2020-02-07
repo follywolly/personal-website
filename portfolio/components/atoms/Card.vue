@@ -42,7 +42,7 @@ export default {
   },
   mounted() {
     if (process.browser) {
-      this.mouse.cursor = document.querySelector('#cursor')
+      this.mouse.cursor = document.querySelector('.cursor-pointer')
       this.checkIfHoverAllowed()
     }
 
