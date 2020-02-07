@@ -30,7 +30,9 @@ export default {
   },
   data() {
     return {
-      timeout: false
+      timeout: false,
+      counter: 0,
+      cursor_scroll_treshold: 0
     }
   },
   components: {
@@ -45,6 +47,10 @@ export default {
     },
     projects() {
       return this.$store.getters.getProjects()
+    },
+    allowUpdate() {
+      const refreshRate = 1
+      return this.counter++ % refreshRate === 0
     }
   },
   mounted() {
@@ -53,16 +59,14 @@ export default {
     }
     const cursor = document.querySelector('#cursor')
     const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
-    if (scrollTop === 0) {
+    this.cursor_scroll_treshold = window.innerHeight / 4 * 3
+    if (scrollTop < this.cursor_scroll_treshold) {
       setTimeout(() => {
-        if (scrollTop < 100) cursor.classList.add('above-fold')
-      }, 4000)
-      window.addEventListener('scroll', e => {
-        const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
-        if (scrollTop > 100) {
-          cursor.classList.remove('above-fold')
+        if (scrollTop < this.cursor_scroll_treshold) {
+          cursor.classList.add('above-fold')
+          window.addEventListener('scroll', this.cursorOnScroll)
         }
-      })
+      }, 4000)
     }
 
     if (process.browser && !observer.exists) {
@@ -118,6 +122,22 @@ export default {
 
   },
   methods: {
+    cursorOnScroll(){
+      if (this.allowUpdate) {
+        const cursor = document.querySelector('#cursor')
+        if (!cursor.classList.contains('above-fold')) cursor.classList.add('above-fold')
+        console.log('FIRED', cursor)
+        const scrollText = document.querySelector('#cursor .circle')
+        const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop
+        TweenLite.to(scrollText, .1, {rotation: Math.round(scrollTop / 5)})
+        if (scrollTop > this.cursor_scroll_treshold) {
+          console.log('STOPPED', scrollTop, this.cursor_scroll_treshold)
+          window.removeEventListener('scroll', this.cursorOnScroll)
+          cursor.classList.remove('above-fold')
+        }
+      }
+      
+    },
     onScroll(e) {
       if (this.timeout) {
 		    window.cancelAnimationFrame(this.timeout);

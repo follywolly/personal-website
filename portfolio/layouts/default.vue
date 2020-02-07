@@ -13,13 +13,21 @@
       </footer>
     </main>
     <div id="cursor">
-      <div class="cursor__text cursor__text--project" aria-hidden="true">view project</div>
-      <div class="cursor__text cursor__text--scroll" aria-hidden="true">scroll down for work</div>
+      <div class="cursor__text cursor__text--project" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="icon"><path class="icon__path" d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+        <span>view project</span>
+      </div>
+      <div class="cursor__text cursor__text--scroll" aria-hidden="true">
+        <svg height="360" width="360" viewBox="-180 -180 360 360" xmlns:xlink="http://www.w3.org/1999/xlink" class="circle">
+          <defs><path id="circle" class="circle__path" d="M-90 0A90 90 0 1190 0 90 90 0 11-90 0z"></path></defs>
+          <text><textPath xlink:href="#circle" class="circle__text">scroll down for work · scroll down for work · scroll down for work · </textPath></text>
+        </svg>
+      </div>
+      <div class="cursor__text cursor__text--external" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="icon"><path class="icon__path" d="M19 6.41L8.7 16.71a1 1 0 1 1-1.4-1.42L17.58 5H14a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0V6.41zM17 14a1 1 0 0 1 2 0v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2h5a1 1 0 0 1 0 2H5v12h12v-5z"/></svg>
+      </div>
     </div>
     <div id="follower">
-    </div>
-    <div id="scrollbar">
-      <div id="scrollbar--inner"></div>
     </div>
   </div>
 
@@ -147,7 +155,6 @@
         }
       },
       onMouseLeave() {
-        console.log('MOUSE LEFT DOC');
         TweenLite.to(this.cursor, .3, {opacity: 0})
         TweenLite.to(this.follower, .5, {opacity: 0})
       },
@@ -219,7 +226,7 @@ html {
     display: block;
   }
   .cursor__text {
-    color: white;
+    color: var(--color-dark);
     opacity: 0;
     position: absolute;
     top: 50%;
@@ -230,29 +237,59 @@ html {
     text-align: center;
     z-index: 14;
     pointer-events: none;
+    transition: all .2s cubic-bezier(0.165, 0.84, 0.44, 1);
     &--scroll {
-      width: 5rem;
-      transition: all .3s cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
-  }
-  &.above-fold {
-    background: transparent;
-    border-color: transparent;
-    mix-blend-mode: difference;
-    &::after {
-      opacity: 1;
-      transform: translate(-50%, 1.75rem) rotate(90deg);
-      // animation: floatPointerVertical .85s infinite alternate ease-in-out;
-        // animation-delay: .6s;
-      @keyframes floatPointerVertical {
-        0% {
-          transform: translate(-50%, 1.75rem) rotate(90deg);
-        }
-        100% {
-          transform: translate(-50%, 2.25rem) rotate(90deg);
+      .circle {
+        opacity: 0;
+        overflow: visible;
+        width: 18rem;
+        height: 18rem;
+        position: relative;
+        top: .25rem;
+        transition: opacity 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+        &__text {
+          text-transform: uppercase;
+          font-size: .85rem;
+          fill: var(--color-light);
         }
       }
     }
+    .icon {
+      margin-left: auto;
+      margin-right: auto;
+      &__path {
+        fill: var(--color-dark);
+      }
+    }
+    span {
+      display: block;
+    }
+    &--external {
+      margin-top: 0;
+      // .icon {
+      //   &__path {
+          
+      //     fill: var(--color-dark);
+      //   }
+      // }
+    }
+  }
+  &.above-fold {
+    mix-blend-mode: difference;
+    // &::after {
+    //   opacity: 1;
+    //   transform: translate(-50%, 1.75rem) rotate(90deg);
+    //   // animation: floatPointerVertical .85s infinite alternate ease-in-out;
+    //     // animation-delay: .6s;
+    //   @keyframes floatPointerVertical {
+    //     0% {
+    //       transform: translate(-50%, 1.75rem) rotate(90deg);
+    //     }
+    //     100% {
+    //       transform: translate(-50%, 2.25rem) rotate(90deg);
+    //     }
+    //   }
+    // }
     &.hover {
       border-color: white;
       &::after {
@@ -261,6 +298,18 @@ html {
     }
     .cursor__text--scroll {
       opacity: 1;
+      .circle {
+        opacity: 1;
+        // animation: rotate 10s infinite linear;
+        // @keyframes rotate {
+        //   0% {
+        //     transform: rotate(0deg);
+        //   }
+        //   100% {
+        //     transform: rotate(360deg);
+        //   }
+        // }
+      }
     }
     &+#follower {
       width: 8rem;
@@ -275,38 +324,43 @@ html {
     height: 5rem;
     left: -2.5rem;
     top: -2.5rem;
-    mix-blend-mode: difference;
     background: white;
+    mix-blend-mode: difference;
     .cursor__text {
       opacity: 0;
     }
-    &.hover--project {
-      width: 5rem;
-      height: 5rem;
-      left: -2.5rem;
-      top: -2.5rem;
+    &.hover--external {
       mix-blend-mode: normal;
-      backdrop-filter: blur(2px) brightness(.6) contrast(1.5);
-      -webkit-backdrop-filter: blur(2px) brightness(.6) contrast(1.5);
-      background: transparent;
-      border-width: 2px;
+      .cursor__text--external {
+        opacity: 1;
+        transition: all .6s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+    }
+    &.hover--project {
+      mix-blend-mode: normal;
+      width: 6rem;
+      height: 6rem;
+      left: -3rem;
+      top: -3rem;
+      // border-width: 2px;
       &::after {
         opacity: 1;
-        transform: translate(3.5rem, -50%) rotate(0deg);
+        transform: translate(4rem, -50%) rotate(0deg);
         transition: opacity .3s, transform .6s cubic-bezier(0.165, 0.84, 0.44, 1);
         animation: floatPointer .85s infinite alternate ease-in-out;
         animation-delay: .6s;
         @keyframes floatPointer {
           0% {
-            transform: translate(3.5rem, -50%);
+            transform: translate(4rem, -50%);
           }
           100% {
-            transform: translate(3rem, -50%);
+            transform: translate(3.5rem, -50%);
           }
         }
       }
       .cursor__text--project {
         opacity: 1;
+        transition: all .6s cubic-bezier(0.165, 0.84, 0.44, 1);
       }
     }
     + #follower {
@@ -377,9 +431,6 @@ body {
   }
   @media screen and (min-width: 60rem) {
     cursor: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
   }
 }
 main {

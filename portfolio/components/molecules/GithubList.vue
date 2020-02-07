@@ -103,9 +103,11 @@ export default {
       items.forEach(item => {
         item.addEventListener('mouseenter', () => {
           cursor.classList.add('hover')
+          cursor.classList.add('hover--external')
         })
         item.addEventListener('mouseleave', () => {
           cursor.classList.remove('hover')
+          cursor.classList.remove('hover--external')
         })
       })
 
